@@ -1,14 +1,20 @@
+<!DOCTYPE html>
 <html>
 	<head>
-		<link type="text/css" href="css/bootstrap.min.css">
-		<link type="text/css" href="css/bootstrap-theme.min.css">
-		<link type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<!-- todo: fixup style.css-->
+	</head>
+	<body>
+		<div id="map"></div>
+		
 		<script src="js/jQuery.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/knockout-3.3.0.js"></script>
-		<script src="js/app.cs"></script>
-	</head>
-	<body>
-		
+		<script src="js/app.js"></script>
+		<script async defer
+	      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&callback=initMap">
+	    </script>
 	</body>
 </html>
