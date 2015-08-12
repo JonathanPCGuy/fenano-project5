@@ -1,0 +1,5 @@
+refreshing prototype knowledge
+http://www.w3schools.com/js/js_object_prototypes.asp
+
+refreshing jQuery knoweldge; sites include from the jQuery domain:
+https://api.jquery.com/removeclass/

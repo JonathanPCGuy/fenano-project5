@@ -7,11 +7,21 @@
 		<!-- todo: fixup style.css-->
 	</head>
 	<body>
-		<div id="map"></div>
-		
+		<row>
+		<aside id="sidebar" class="closed">
+			<div id="clickhere">click here to snap menu to side</div>
+			<div class="menu-content">
+				<ul data-bind="foreach: placesList" >
+					<li data-bind="text: title"></li>
+				</ul>
+			</div>
+		</aside>
+		<div id="map" class="col-md-12"></div>
+		</row>
 		<script src="js/jQuery.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/knockout-3.3.0.js"></script>
+		<script src="js/placeOfInterests.js"></script>
 		<script src="js/app.js"></script>
 		<script async defer
 	      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&callback=initMap">

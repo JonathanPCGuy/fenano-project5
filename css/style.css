@@ -3,3 +3,24 @@ html, body { height: 100%; margin: 0; padding: 0; }
 #map { 
   height: 100%; 
  }
+ 
+ #sidebar.closed {
+   z-index: 3;
+   position: absolute;
+   top: 0;
+   left: 0;
+   margin: 10px;
+ }
+ 
+ #sidebar {
+   z-index: 0;
+   position: relative;
+ }
+ 
+ .menu-content {
+   display: none;
+ }
+ 
+ .menu-content.visible {
+   display: block;
+ }

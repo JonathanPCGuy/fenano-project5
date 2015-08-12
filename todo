@@ -1,0 +1,6 @@
+-layout ui
+	o left side bar with search icon <---- in progress
+	O list that shows markers
+	O in responsive mode have list/map occupy 50% (up/down for portrait, left/right for landscape)
+- ajax to data sources
+- randomized markers
