@@ -1,0 +1,12 @@
+body {
+    text-align: center;
+}
+
+.align-top-gameboard {
+  padding-top: 50px;
+}
+
+.gameButtons {
+  margin: 10px;
+  width:100%;
+}
