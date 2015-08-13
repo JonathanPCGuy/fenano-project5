@@ -11,6 +11,7 @@ var Place = function(title, subtitle, location) {
 	this.subtitle = subtitle;
 	this.location = location;
 	
+	// is this ok or not?
 	this.PrettyPrintCoords = function() {
 		return this.location.lat + ", " + this.location.lon;
 	};	

@@ -37,5 +37,14 @@ var PlacesViewModel = function() {
 	
 };
 
+var MapViewModel = function() {
+	// we will take the places list (move out of view model?)
+	// using knockout (?) generate markers based on what's in the array
+	// eventually when we add/remove from the array the markers should add/remove
+		
+};
+
+
+
 
 ko.applyBindings(new PlacesViewModel());

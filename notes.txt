@@ -1,0 +1,12 @@
+// this will eventually be loaded from local storage
+// new locations - dynamically shown based on view
+// search only for existing map markers
+initially hardcoded, later on dynamic
+later on search will also get new markers
+ability to save markers?
+
+on click of a marker do the info popup per spec
+
+to determine: does the underlying structure need bindings? it doesn't change
+so we don't need it? or do we need to do it when we do dynamic markers? TBD
+
