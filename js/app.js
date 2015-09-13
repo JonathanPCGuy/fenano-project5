@@ -10,6 +10,7 @@ function initMap() {
 	panControlOptions: { position:  google.maps.ControlPosition.RIGHT_TOP },
 	zoomControlOptions: { position:  google.maps.ControlPosition.RIGHT_CENTER}
   });	
+	ko.applyBindings(new PlacesViewModel());
 };
 
 $('#clickhere').click(function() {
@@ -32,19 +33,27 @@ var PlacesViewModel = function() {
 	var that = this;
 	this.placesList = ko.observableArray();
 	Places.forEach(function(singlePlace) {
-		that.placesList.push(singlePlace);
+		var markerPlace = new google.maps.Marker({
+			position: new google.maps.LatLng(singlePlace.location.lat, singlePlace.location.lon),
+			map: map,
+			title: singlePlace.title	
+		});
+				// we're duplicating data, but i'm not sure how to eliminate duplication
+		// for now i'll do this until i can figure it out
+		singlePlace.marker = markerPlace;
+		that.placesList.push(singlePlace);	
+
 	});
 	
+	this.toggleMarker = function(singlePlace) {
+		if(singlePlace.marker.map == null)
+		{
+			singlePlace.marker.setMap(map);
+		}
+		else
+		{
+			singlePlace.marker.setMap(null);
+		}	
+	};
+	
 };
-
-var MapViewModel = function() {
-	// we will take the places list (move out of view model?)
-	// using knockout (?) generate markers based on what's in the array
-	// eventually when we add/remove from the array the markers should add/remove
-		
-};
-
-
-
-
-ko.applyBindings(new PlacesViewModel());

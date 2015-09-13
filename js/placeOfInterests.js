@@ -15,11 +15,16 @@ var Place = function(title, subtitle, location) {
 	this.PrettyPrintCoords = function() {
 		return this.location.lat + ", " + this.location.lon;
 	};	
+	
+	this.PrintListItem = function() {
+		return this.title + " (" + 	this.PrettyPrintCoords() + ")";	
+	};
+	
 };
 
 
 var Places = [];
 
 for(var i = 0; i < 10; i++) {
-	Places.push(new Place("title" + i, "subtitle" + i, new Location(29.7604 + i/100, 95.3698 + i/100 )));
+	Places.push(new Place("title" + i, "subtitle" + i, new Location(29.7604 + i/100, -95.3698 + i/100 )));
 }

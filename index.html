@@ -12,7 +12,8 @@
 			<div id="clickhere">click here to snap menu to side</div>
 			<div class="menu-content">
 				<ul data-bind="foreach: placesList" >
-					<li data-bind="text: PrettyPrintCoords()"></li>
+					<li data-bind="text: PrintListItem(), click:$parent.toggleMarker"></li>
+					<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
 				</ul>
 			</div>
 		</aside>
