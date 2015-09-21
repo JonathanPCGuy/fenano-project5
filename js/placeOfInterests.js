@@ -6,7 +6,7 @@ var Location = function(lat, lon) {
 	this.lon = lon;	
 };
 
-var Place = function(title, subtitle, location) {
+var PlaceSource = function(title, subtitle, location) {
 	this.title = title;
 	this.subtitle = subtitle;
 	this.location = location;
@@ -20,11 +20,13 @@ var Place = function(title, subtitle, location) {
 		return this.title + " (" + 	this.PrettyPrintCoords() + ")";	
 	};
 	
+	// computed observable?
+	
 };
 
 
-var Places = [];
+var PlaceSourceArray = [];
 
 for(var i = 0; i < 10; i++) {
-	Places.push(new Place("title" + i, "subtitle" + i, new Location(29.7604 + i/100, -95.3698 + i/100 )));
+	PlaceSourceArray.push(new PlaceSource("title" + i, "subtitle" + i, new Location(29.7604 + i/100, -95.3698 + i/100 )));
 }

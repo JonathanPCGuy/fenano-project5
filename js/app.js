@@ -28,22 +28,57 @@ $('#clickhere').click(function() {
 	$('.menu-content').toggleClass('visible');
 });
 
+var Place = function(data) {
+	this.marker = new google.maps.Marker({
+			position: new google.maps.LatLng(data.location.lat, data.location.lon),
+			map: map,
+			title: data.title	
+		});	
+};
+
 var PlacesViewModel = function() {
 
-	var that = this;
+	var self = this;
 	this.placesList = ko.observableArray();
-	Places.forEach(function(singlePlace) {
-		var markerPlace = new google.maps.Marker({
-			position: new google.maps.LatLng(singlePlace.location.lat, singlePlace.location.lon),
-			map: map,
-			title: singlePlace.title	
-		});
-				// we're duplicating data, but i'm not sure how to eliminate duplication
-		// for now i'll do this until i can figure it out
-		singlePlace.marker = markerPlace;
-		that.placesList.push(singlePlace);	
-
+	this.filter = ko.observable("");
+	
+	
+	this.filteredPlaces = ko.computed(function() {
+		var filter = self.filter().toLowerCase();
+		if(!filter) {
+			// to study: context
+			ko.utils.arrayForEach(self.placesList(), function(singlePlace){
+			//self.placesList().forEach(function(singlePlace) {
+				self.setMarker(singlePlace, true);
+			});
+			//}, this);
+			return self.placesList();
+		}
+		else {
+			return ko.utils.arrayFilter(self.placesList(), function(place) {
+				// to do: optimize
+				if(place.marker.title.toLowerCase().indexOf(filter) >= 0) {
+					self.setMarker(place, true);
+					return true;
+				}
+				else {
+					self.setMarker(place, false);
+					return false;
+				}
+			});
+		}
 	});
+	
+	this.setMarker = function(singlePlace, visible) {
+		// to do: optimize
+		if(visible && singlePlace.marker.getMap() == null) {
+			
+			singlePlace.marker.setMap(map);
+		}
+		else if (!visible && singlePlace.marker.getMap() != null) {
+			singlePlace.marker.setMap(null);
+		}
+	}
 	
 	this.toggleMarker = function(singlePlace) {
 		if(singlePlace.marker.map == null)
@@ -55,5 +90,20 @@ var PlacesViewModel = function() {
 			singlePlace.marker.setMap(null);
 		}	
 	};
+	
+	this.prettyPrint = function(singlePlace) {
+		return singlePlace.marker.title;	
+	};
+	
+	// moving this to bottom fixes issue
+	// need to find way to not to have to this
+	// thinking its the way i load my data within the view model at the time not all the functions are set
+	// unless i define it another way?
+	// init from our data source
+	// later on we'll toss this in favor of dynamic places
+	PlaceSourceArray.forEach(function(data) {
+		var markerPlace = new Place(data);
+		self.placesList.push(markerPlace);
+	});
 	
 };

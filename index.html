@@ -11,8 +11,9 @@
 		<aside id="sidebar" class="closed">
 			<div id="clickhere">click here to snap menu to side</div>
 			<div class="menu-content">
-				<ul data-bind="foreach: placesList" >
-					<li data-bind="text: PrintListItem(), click:$parent.toggleMarker"></li>
+				<div id="filter">Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></div>
+				<ul data-bind="foreach: filteredPlaces" >
+					<li data-bind="text: $parent.prettyPrint($data), click:$parent.toggleMarker"></li>
 					<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
 				</ul>
 			</div>
