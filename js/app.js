@@ -1,6 +1,12 @@
 var map;
 var isClosed = false; // move to mvvm model later
 
+var infoWindowContent = '<div class="my-info-window" id="infowindow-%data%"></div>';
+var infoWindowId = '#infowindow-%data%';
+
+function formatText(template, text) {
+  return template.replace('%data%', text);
+}
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -28,12 +34,15 @@ $('#clickhere').click(function() {
 	$('.menu-content').toggleClass('visible');
 });
 
-var Place = function(data) {
+var Place = function(data, callback) {
+	var self = this;
 	this.marker = new google.maps.Marker({
 			position: new google.maps.LatLng(data.location.lat, data.location.lon),
 			map: map,
-			title: data.title	
-		});	
+			title: data.title,
+			animation: google.maps.Animation.DROP	
+		});		
+	this.marker.addListener('click', callback);
 };
 
 var PlacesViewModel = function() {
@@ -49,7 +58,7 @@ var PlacesViewModel = function() {
 			// to study: context
 			ko.utils.arrayForEach(self.placesList(), function(singlePlace){
 			//self.placesList().forEach(function(singlePlace) {
-				self.setMarker(singlePlace, true);
+				self.setMarkerVisibility(singlePlace, true);
 			});
 			//}, this);
 			return self.placesList();
@@ -58,18 +67,18 @@ var PlacesViewModel = function() {
 			return ko.utils.arrayFilter(self.placesList(), function(place) {
 				// to do: optimize
 				if(place.marker.title.toLowerCase().indexOf(filter) >= 0) {
-					self.setMarker(place, true);
+					self.setMarkerVisibility(place, true);
 					return true;
 				}
 				else {
-					self.setMarker(place, false);
+					self.setMarkerVisibility(place, false);
 					return false;
 				}
 			});
 		}
 	});
 	
-	this.setMarker = function(singlePlace, visible) {
+	this.setMarkerVisibility = function(singlePlace, visible) {
 		// to do: optimize
 		if(visible && singlePlace.marker.getMap() == null) {
 			
@@ -80,15 +89,27 @@ var PlacesViewModel = function() {
 		}
 	}
 	
-	this.toggleMarker = function(singlePlace) {
-		if(singlePlace.marker.map == null)
-		{
-			singlePlace.marker.setMap(map);
-		}
-		else
-		{
-			singlePlace.marker.setMap(null);
-		}	
+	this.menuItemClick = function(singlePlace) {
+		map.setCenter(singlePlace.marker.position);
+		// zoom?
+	};
+	
+	this.markerClick = function() {
+		// seems the context when the thing is clicked is the marker itself?!?!
+		var infoWindow = new google.maps.InfoWindow({content: formatText(infoWindowContent, this.getTitle())});
+		infoWindow.addListener('domready', self.infoWindowDomReady);
+		infoWindow.open(map, this);	
+		
+		// next steps: attaching a DOM
+		
+	};
+	
+	this.infoWindowDomReady = function() {
+		// context is the infoWindow
+		console.log("dom ready!");
+		var targetDiv = formatText(infoWindowId, this.getAnchor().getTitle());
+		// animation looks clunky, will need to optimize
+		$(targetDiv).text("targetDiv" + this.getAnchor().getTitle() + 'testtestfjkfjdfjlsd');	
 	};
 	
 	this.prettyPrint = function(singlePlace) {
@@ -102,7 +123,7 @@ var PlacesViewModel = function() {
 	// init from our data source
 	// later on we'll toss this in favor of dynamic places
 	PlaceSourceArray.forEach(function(data) {
-		var markerPlace = new Place(data);
+		var markerPlace = new Place(data, self.markerClick);
 		self.placesList.push(markerPlace);
 	});
 	
