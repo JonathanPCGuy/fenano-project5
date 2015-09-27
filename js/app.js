@@ -108,8 +108,12 @@ var PlacesViewModel = function() {
 		// context is the infoWindow
 		console.log("dom ready!");
 		var targetDiv = formatText(infoWindowId, this.getAnchor().getTitle());
+		
+		// now make the call to my new ajax functions to get the data
+		var ajaxCalls = new LocationInfoBox(this.getAnchor().getTitle(), targetDiv);
+		ajaxCalls.infoBoxOpened();
 		// animation looks clunky, will need to optimize
-		$(targetDiv).text("targetDiv" + this.getAnchor().getTitle() + 'testtestfjkfjdfjlsd');	
+		//$(targetDiv).text("targetDiv" + this.getAnchor().getTitle() + 'testtestfjkfjdfjlsd');	
 	};
 	
 	this.prettyPrint = function(singlePlace) {
