@@ -109,8 +109,9 @@ var PlacesViewModel = function() {
 		console.log("dom ready!");
 		var targetDiv = formatText(infoWindowId, this.getAnchor().getTitle());
 		
+		var location = {'lat': this.position.H, 'lon': this.position.L};
 		// now make the call to my new ajax functions to get the data
-		var ajaxCalls = new LocationInfoBox(this.getAnchor().getTitle(), targetDiv);
+		var ajaxCalls = new LocationInfoBox(this.getAnchor().getTitle(), location, targetDiv);
 		ajaxCalls.infoBoxOpened();
 		// animation looks clunky, will need to optimize
 		//$(targetDiv).text("targetDiv" + this.getAnchor().getTitle() + 'testtestfjkfjdfjlsd');	

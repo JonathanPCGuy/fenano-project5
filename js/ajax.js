@@ -43,23 +43,7 @@ LocationInfoAjax.prototype = {
     }
 };
 
-
-// JSONP sucks!
-// simple solution: wrap into func and point to instance
-// jsonp is annoying
-// need to look at bind stuff later
-/*
-var svc_search_v2_articlesearch = function (response) {
-                    console.log("in global callback");
-                    var articleListContainer = $.create('<div id="#nytimes-articles"></div>');
-                    response.response.docs.forEach(function(article) {
-                        articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
-                    });
-                    console.log(response);
-                    this.targetDom.append(articleListContainer);
-                }*/
-
-var LocationAjaxCalls = function(title, targetDom)
+var LocationAjaxCalls = function(title, location, targetDom)
 {
     //var self = this;
     this.ajaxArray = [];
@@ -78,18 +62,6 @@ var LocationAjaxCalls = function(title, targetDom)
                     'q': title,
                     'api-key': nyTimesApiKey
                 };
-                //var self = this;
-            //http://stackoverflow.com/questions/12864096/can-i-make-a-jquery-jsonp-request-without-adding-the-callback-parameter-in-u
-            //var svc_search_v2_articlesearch = function () {
-                /*
-                    console.log("in specified callback (not sure which one is actually needed)");
-                    var articleListContainer = $('<div id="#nytimes-articles"></div>');
-                    response.response.docs.forEach(function(article) {
-                        articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
-                    });
-                    console.log(response);
-                    this.targetDom.append(articleListContainer);*/
-                //}
             
             var ajaxConfig = {
                 url: nyTimesBaseUrl,
@@ -104,37 +76,7 @@ var LocationAjaxCalls = function(title, targetDom)
                 dataType: "json",
                 timeout: 5000,
                 // Tell nytimes what we want and that we want JSON
-                "data": nyTimesData/*,
-                
-                'success': function(response) {
-                                        console.log("in ajax config callback (not sure which one is actually needed)");
-                    var articleListContainer = $('<div id="#nytimes-articles"></div>');
-                    response.response.docs.forEach(function(article) {
-                        articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
-                    });
-                    console.log(response);
-                    this.targetDom.append(articleListContainer);
-                }*/
-                
-                
-                
-                //,
-                /*
-                error: function(x, t, m) {
-                    if(t==="timeout") {
-                        this.onError(); // context? only just timeout? other errors to cover?
-                    }
-                },*//*
-                'success': function(response) {
-                    console.log('from the ajax callback');
-                    var articleListContainer = $.create('<div id="#nytimes-articles"></div>');
-                        response.response.docs.forEach(function(article) {
-                            articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
-                        });
-                        console.log(response);
-                    // finally attached it to the dom!
-                    $(self.targetDom).append(articleListContainer);*/
-                //}               
+                "data": nyTimesData          
                 };
             return ajaxConfig;
             })(), 
@@ -142,7 +84,7 @@ var LocationAjaxCalls = function(title, targetDom)
         {
                     // custom handler
                 console.log('custom handler');
-                var articleListContainer = $('<div id="#nytimes-articles"></div>');
+                var articleListContainer = $('<div class="nytimes-articles"></div>');
                     response.response.docs.forEach(function(article) {
                         articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
                     });
@@ -152,6 +94,45 @@ var LocationAjaxCalls = function(title, targetDom)
 
         },
         targetDom));
+      
+      // future goal: make this all param somehow?
+      this.ajaxArray.push(new LocationInfoAjax('Starbucks',
+        (function() {
+            //make ajax config function 
+                var baseUrl = 'https://testhost.openapi.starbucks.com/location/v2/stores/nearby';
+                /*
+                ,
+                    'callback': callbackTarget
+                */
+                // location.lat, location.lon
+                var paramData = {
+                    'latlng': location.lat+ ',' + location.lon,
+                    'radius': 5
+                };
+            
+            var ajaxConfig = {
+                url: baseUrl,
+                dataType: "json",
+                timeout: 5000,
+                // Tell nytimes what we want and that we want JSON
+                "data": paramData          
+                };
+            return ajaxConfig;
+            })(), 
+        function(response)
+        {
+                    // custom handler
+                console.log('custom handler - starbucks test api');
+                var nearbyStarbucksContainer = $('<div class="starbucks-nearby"></div>');
+                    response.stores.forEach(function(singleStore) { // should sort by distance
+                        nearbyStarbucksContainer.append('<li>' + singleStore.store.name + ' - ' + singleStore.store.address.streetAddressLine1 + '</li>');
+                    });
+                    console.log(response);
+                // finally attached it to the dom!
+                $(this.targetDomId).append(nearbyStarbucksContainer)
+
+        },
+        targetDom));      
  /*
 this.ajaxArray.push(new LocationInfoAjax('Wikipedia',null, 
         function() {
@@ -165,11 +146,12 @@ this.ajaxArray.push(new LocationInfoAjax('Wikipedia',null,
         */
 };
 
-var LocationInfoBox = function(marker, targetDom)
+var LocationInfoBox = function(marker, location, targetDom)
 {
     // todo: dom order
+    // this marker doesn't work?
     this.marker = marker;
-    this.locationAjaxCalls = new LocationAjaxCalls(marker.title, targetDom);
+    this.locationAjaxCalls = new LocationAjaxCalls(marker.title, location, targetDom);
 }
 
 LocationInfoBox.prototype = {
@@ -192,124 +174,3 @@ LocationInfoBox.prototype = {
 
 
 // one object for everything
-/*
-function loadData() {
-
-    var $body = $('body');
-    var $wikiElem = $('#wikipedia-links');
-    var $nytHeaderElem = $('#nytimes-header');
-    var $nytElem = $('#nytimes-articles');
-    var $greeting = $('#greeting');
-
-    // clear out old data before new request
-    $wikiElem.text("");
-    $nytElem.text("");
-
-    // load streetview
-    var streetviewKey = "AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs";
-    // YOUR CODE GOES HERE!
-    var baseUrl = "https://maps.googleapis.com/maps/api/streetview";
-    var city = $('#city').val();
-    var location = $('#street').val() + "," + $('#city').val();
-    var data = {
-      "location": location,
-      "size": "640x480",
-      key: streetviewKey  
-    };
-    
-    var targetUrl = baseUrl + '?' + $.param(data);
-    
-    var nyTimesBaseUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.jsonp';
-    var nyTimesApiKey = 'e7f4cd39938925b5b8319e5054a24442:13:22689669';
-    var callbackTarget = "svc_search_v2_articlesearch";
-    var nyTimesData = {
-        'q': location,
-        'api-key': nyTimesApiKey,
-        'callback': callbackTarget
-    };
-    
-    var targetNyTimesUrl = nyTimesBaseUrl;// + '?' + $.param(nyTimesData);
-    // Using YQL and JSONP
-    $.ajax({
-        url: nyTimesBaseUrl,
-     
-        // The name of the callback parameter, as specified by the nytimes service
-        // todo: better understand this
-        jsonp: callbackTarget,
-     
-        // Tell jQuery we're expecting JSONP
-        dataType: "jsonp",
-        timeout: 5000,
-        // Tell nytimes what we want and that we want JSON
-        "data": nyTimesData,
-        
-        error: function(x, t, m) {
-            if(t==="timeout") {
-                $nytElem.append('<p>Unable to get articles from NYTimes.</p>');
-            }
-        },
-         'success': function(response) {
-             console.log('from the ajax callback');
-               var articleListContainer = $('#nytimes-articles');
-                response.response.docs.forEach(function(article) {
-                    articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
-                });
-                console.log(response);
-         }
-    });
-    
-    var wikiBaseUrl = 'http://en.wikipfjeiwofjewiofjewiofjiweofjiweojfowiedia.org/w/api.php';
-    var wikiParams = {
-      'action': 'query',
-      'prop': 'info',
-      'format': 'json',
-      'inprop': 'url',
-      'titles': city   
-    };
-    
-    //TODO: understand jsonp better
-    
-
-    
-    $.ajax({
-        'url': wikiBaseUrl,
-        //'jsonp': wikiCallback,
-        dataType: 'jsonp',
-        'data': wikiParams,
-        'success': function(response) {
-            console.log(response);
-            console.log("in wiki success");
-            Object.keys(response.query.pages).forEach(function(wikiPage) {
-                $wikiElem.append('<li><a href="' + response.query.pages[wikiPage].fullurl + '">' +response.query.pages[wikiPage].title + '</a></li>'); 
-            });
-        }
-    });
-    /*
-    $.ajax({
-       "url": baseUrl,
-       'method': "GET",
-       "data": data,
-       success: function() {
-           // get string to image from response
-           
-           $body.
-       } 
-    });
-    // set background
-    $body.append('<img class="bgimg" src="' + targetUrl + '">');
-    return false;
-};
-
-
-function svc_search_v2_articlesearch(response) {
-    console.log("in callback");
-    var articleListContainer = $('#nytimes-articles');
-    response.response.docs.forEach(function(article) {
-        articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
-    });
-    console.log(response);
-};
-
-
-$('#form-container').submit(loadData);
-*/
