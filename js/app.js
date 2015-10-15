@@ -18,8 +18,11 @@ function initMap() {
 	zoomControlOptions: { position:  google.maps.ControlPosition.RIGHT_CENTER}
   });
   // why do i have to link it to a map?
-  placeService =  new google.maps.places.PlacesService(map);	
-	ko.applyBindings(new PlacesViewModel());
+  placeService =  new google.maps.places.PlacesService(map);
+  
+  // callback to add: on bounds change
+  	
+  ko.applyBindings(new PlacesViewModel());
 };
 
 $('#clickhere').click(function() {
@@ -92,7 +95,7 @@ var PlacesViewModel = function() {
 		if(visible && singlePlace.marker.getMap() == null) {
 			
 			singlePlace.marker.setMap(map);
-		}
+		}	
 		else if (!visible && singlePlace.marker.getMap() != null) {
 			singlePlace.marker.setMap(null);
 		}
@@ -143,7 +146,7 @@ var PlacesViewModel = function() {
 		 
 		 //var limit = 10;
 		 if (status == google.maps.places.PlacesServiceStatus.OK) {
-		 	var limit = results.length > 10 ? 10 : results.length;
+		 	var limit = results.length;// > 10 ? 10 : results.length;
 			 for(var i = 0; i < limit; i++) {
 				 	var currentItem = results[i];
 				 	var placeItem = new PlaceItem(currentItem.name, currentItem.place_id, currentItem.geometry.location.lat(), currentItem.geometry.location.lng());
@@ -161,14 +164,36 @@ var PlacesViewModel = function() {
 
 	}
 	
-	var center = map.getCenter();
-	var request = {
-		location: center,
-		radius: '10000', // todo: fit to screen instead of round
-		types: this.currentCategory.key	
+	this.getCurrentViewableMapArea = function() {
+		// read map object and get viewable area
+		// needs to fit into format for request
+		// for now use NE corner. If bad UI we'll modify to use smaller radius
+		var bounds = map.getBounds();
+		var mapCenter = bounds.getCenter();
+		var mapCorner = bounds.getNorthEast();	
+		
+		var radius = google.maps.geometry.spherical.computeDistanceBetween(mapCenter, mapCorner);
+		
+		return radius;
 	};
-	// to do: shove this into computed so the list will auto-update
-	placeService.nearbySearch(request, this.placesResultCallback);
+	
+	
+	
+	
+	// first 
+	map.addListener('bounds_changed', function() {
+		
+		var searchRadius = self.getCurrentViewableMapArea();
+		var mapCenter = map.getCenter();
+		var request = {
+			location: mapCenter,
+			radius: searchRadius, // todo: fit to screen instead of round
+			types: self.currentCategory.key	
+		};
+		// as-is this would constantly update. for this pass that's ok
+		placeService.nearbySearch(request, self.placesResultCallback);	
+	});
+	
 	
 	/*
 	PlaceSourceArray.forEach(function(data) {
