@@ -10,6 +10,8 @@
 		<row>
 		<aside id="sidebar" class="closed">
 			<div id="clickhere">click here to snap menu to side</div>
+			<!-- this ui is still very ugly, will fix later-->
+			<div id="updateplaces" class="search-button" data-bind="css: {hidden: showRefreshButton() != true}">click here to search current map area</div>
 			<div class="menu-content">
 				<div id="filter">Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></div>
 				<ul data-bind="foreach: filteredPlaces" >

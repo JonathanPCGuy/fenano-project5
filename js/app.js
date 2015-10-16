@@ -63,6 +63,10 @@ var PlacesViewModel = function() {
 	
 	this.currentCategory = ko.observable(this.categoryList[0]);
 
+	// observable to receive move event
+	// value to show search in area button will be dependent on this
+	//this.refreshButton = $
+	this.showRefreshButton = ko.observable(false);
 	
 	this.filteredPlaces = ko.computed(function() {
 		var filter = self.filter().toLowerCase();
@@ -145,7 +149,14 @@ var PlacesViewModel = function() {
 	this.placesResultCallback = function(results, status) {
 		 
 		 //var limit = 10;
+		 
 		 if (status == google.maps.places.PlacesServiceStatus.OK) {
+			 // clear out existing, if any
+			self.placesList.remove(function(place){
+				// ok need to remove from the map itself
+				place.marker.setMap(null);
+				return true;
+			});
 		 	var limit = results.length;// > 10 ? 10 : results.length;
 			 for(var i = 0; i < limit; i++) {
 				 	var currentItem = results[i];
@@ -177,12 +188,7 @@ var PlacesViewModel = function() {
 		return radius;
 	};
 	
-	
-	
-	
-	// first 
-	map.addListener('bounds_changed', function() {
-		
+	this.searchMap = function() {
 		var searchRadius = self.getCurrentViewableMapArea();
 		var mapCenter = map.getCenter();
 		var request = {
@@ -192,9 +198,33 @@ var PlacesViewModel = function() {
 		};
 		// as-is this would constantly update. for this pass that's ok
 		placeService.nearbySearch(request, self.placesResultCallback);	
+	};
+	
+	this.firstTimeSearch = true;
+	
+	// first 
+	map.addListener('bounds_changed', function() {
+		// how to search on load once, and then when the button is clicked?
+		if(self.firstTimeSearch == true)
+		{
+			self.firstTimeSearch = false;
+			self.searchMap();
+		}
+		else
+		{
+			// toggle class
+			self.showRefreshButton(true);
+			// later on when we click we'll hide the button
+		}
 	});
 	
+	// how to attach listeners in a mvvm context?
+	$('#updateplaces').click(function() {
+		// issue: need to clear out existing stuff
+		self.searchMap();
+	});
 	
+	// not sure how else to do this? halp =()
 	/*
 	PlaceSourceArray.forEach(function(data) {
 		var markerPlace = new Place(data, self.markerClick);
