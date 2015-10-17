@@ -1,7 +1,6 @@
 // data is a google places search result item
 var Place = function(data, callback) {
 	var self = this;
-	//this.rawData = data;
 	this.title = data.name;
 	this.place_id = data.place_id
 	this.location = {

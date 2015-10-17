@@ -10,9 +10,10 @@
 		<row>
 		<aside id="sidebar" data-bind="css: {'col-md-3': sideMenuVisible(), closed:!sideMenuVisible()}" >
 			<!-- no params needed for this one, maybe for others-->
+			<!-- need to stick buttons in own div and make it pretty-->
 			<div id="clickhere" data-bind="click: toggleSideMenu">click here to snap menu to side</div>
 			<!-- this ui is still very ugly, will fix later-->
-			<div id="updateplaces" class="search-button" data-bind="css: {hidden: showRefreshButton() != true}">click here to search current map area</div>
+			<div id="updateplaces" class="search-button" data-bind="css: {hidden: showRefreshButton() != true}, click: searchMap">click here to search current map area</div>
 			<div class="menu-content" data-bind="css: {visible: sideMenuVisible}">
 				<div id="filter">Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></div>
 				<ul data-bind="foreach: filteredPlaces" >

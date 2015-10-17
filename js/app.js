@@ -2,7 +2,6 @@
 
 var map;
 var placeService;
-var isClosed = false; // move to mvvm model later
 
 // todo: move to a MVVM
 

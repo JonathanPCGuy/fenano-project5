@@ -1,16 +1,12 @@
 // starting code is the ajax code from the mini course on ajax
 
-// to research: how to load in ajax options without invoking it immediately
-// so what we'll do is wrap up a common object that we plug in ajax config and callbacks on
-// how to process the response. errors will be supplied
-// this should make it easier to add new sources of data since they'll only deal
-// with certain APIs
+// function that provides a framework for third party apis to be queried
+// when a location marker is activated
 var LocationInfoAjax = function(sourceName, ajaxConfig, ajaxSuccess, targetDomId) {
     this.sourceName = sourceName;
     this.ajaxConfig = ajaxConfig;
     this.ajaxConfig.context = this;
     this.ajaxSuccess = ajaxSuccess;
-    //this.onSuccess = onSuccess;
     this.targetDomId = targetDomId;	
 };
 
