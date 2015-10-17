@@ -1,6 +1,5 @@
--layout ui
-	o left side bar with search icon <---- in progress
-	O list that shows markers
-	O in responsive mode have list/map occupy 50% (up/down for portrait, left/right for landscape)
-- ajax to data sources
-- randomized markers
+goal: refactor into true mvvm
+- this will take a while
+goal: make ui look good
+goal: local storage
+goal: contact udacity coach, do code 1:1 code review

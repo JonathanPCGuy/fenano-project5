@@ -53,7 +53,6 @@ var LocationAjaxCalls = function(title, location, targetDom)
             //make ajax config function 
                 var nyTimesBaseUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.json';
                 var nyTimesApiKey = 'e7f4cd39938925b5b8319e5054a24442:13:22689669';
-                var callbackTarget = "svc_search_v2_articlesearch";
                 /*
                 ,
                     'callback': callbackTarget
@@ -133,17 +132,6 @@ var LocationAjaxCalls = function(title, location, targetDom)
 
         },
         targetDom));      
- /*
-this.ajaxArray.push(new LocationInfoAjax('Wikipedia',null, 
-        function() {
-            //ajax function    
-        },
-        function()
-        {
-            // success /formatting function
-        },
-        targetDom));  
-        */
 };
 
 var LocationInfoBox = function(marker, location, targetDom)
@@ -168,9 +156,3 @@ LocationInfoBox.prototype = {
       // stop?! prevent writing? how to do...
   }  
 };
-// phase 1 - hardcode to Houston, TX as query string, don't go through mvvm. no pretty loading
-// phase 2 - use location marker title as query string, don't go through mvvm. pretty loading?
-// phase 3 - go through mvvm
-
-
-// one object for everything

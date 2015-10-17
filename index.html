@@ -8,11 +8,12 @@
 	</head>
 	<body>
 		<row>
-		<aside id="sidebar" class="closed">
-			<div id="clickhere">click here to snap menu to side</div>
+		<aside id="sidebar" data-bind="css: {'col-md-3': sideMenuVisible(), closed:!sideMenuVisible()}" >
+			<!-- no params needed for this one, maybe for others-->
+			<div id="clickhere" data-bind="click: toggleSideMenu">click here to snap menu to side</div>
 			<!-- this ui is still very ugly, will fix later-->
 			<div id="updateplaces" class="search-button" data-bind="css: {hidden: showRefreshButton() != true}">click here to search current map area</div>
-			<div class="menu-content">
+			<div class="menu-content" data-bind="css: {visible: sideMenuVisible}">
 				<div id="filter">Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></div>
 				<ul data-bind="foreach: filteredPlaces" >
 					<li data-bind="text: $parent.prettyPrint($data), click:$parent.menuItemClick"></li>
@@ -20,14 +21,15 @@
 				</ul>
 			</div>
 		</aside>
-		<div id="map" class="col-md-12"></div>
+		<div id="map" data-bind="css: {'col-md-12':!sideMenuVisible, 'col-md-9': sideMenuVisible}"></div>
 		</row>
-		<script src="js/jQuery.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/knockout-3.3.0.js"></script>
-		<script src="js/placeOfInterests.js"></script>
+		<script src="js/libs/jQuery.js"></script>
+		<script src="js/libs/bootstrap.min.js"></script>
+		<script src="js/libs/knockout-3.3.0.js"></script>
 		<script src="js/ajax.js"></script>
-		<script src="js/categories.js"></script>
+		<script src="js/models/Categories.js"></script>
+		<script src="js/models/Place.js"></script>
+		<script src="js/viewmodels/Places.js"></script>
 		<script src="js/app.js"></script>
 		<script async defer
 	      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&libraries=places,geometry&callback=initMap">
