@@ -1,11 +1,12 @@
+// data is a google places search result item
 var Place = function(data, callback) {
 	var self = this;
 	//this.rawData = data;
-	this.title = data.title;
+	this.title = data.name;
 	this.place_id = data.place_id
 	this.location = {
-		lat: data.lat,
-		lon: data.lon
+		lat: data.geometry.location.lat(),
+		lon: data.geometry.location.lng()
 	};
 	this.marker = new google.maps.Marker({
 			position: new google.maps.LatLng(this.location.lat, this.location.lon),

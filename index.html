@@ -16,7 +16,7 @@
 			<div class="menu-content" data-bind="css: {visible: sideMenuVisible}">
 				<div id="filter">Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></div>
 				<ul data-bind="foreach: filteredPlaces" >
-					<li data-bind="text: $parent.prettyPrint($data), click:$parent.menuItemClick"></li>
+					<li data-bind="text: title, click:$parent.menuItemClick"></li>
 					<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
 				</ul>
 			</div>

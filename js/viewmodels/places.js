@@ -20,6 +20,9 @@ var PlacesViewModel = function(categoryList) {
 	
 	this.sideMenuVisible = ko.observable(false);
 	
+	// internal flag to allow initial search on load
+	this.firstTimeSearch = true;
+	
 	// computed observables
 	
 	this.filteredPlaces = ko.computed(function() {
@@ -48,24 +51,6 @@ var PlacesViewModel = function(categoryList) {
 		}
 	});
 	
-	// ui functions
-	//TODO: move this to view model
-	/*
-$('#clickhere').click(function() {
-	// open it up
-	// todo: keep in mind responsive view
-	// todo: how to prevent weird resizing (ie how to do it in 1 transaction?)
-	// todo: keep map centered when sidebar pops up
-	// need to deal with corner cases
-	// bootstrap transition, first keep it simple
-	// is there a better way than changing class stuff?
-	$('#map').toggleClass('col-md-12');
-	$('#map').toggleClass('col-md-9');
-	$('#sidebar').toggleClass('closed');
-	$('#sidebar').toggleClass('col-md-3');
-	$('.menu-content').toggleClass('visible');
-});*/
-
 	this.toggleSideMenu = function() {
 		this.sideMenuVisible(!this.sideMenuVisible());	
 	};
@@ -73,6 +58,7 @@ $('#clickhere').click(function() {
 	this.menuItemClick = function(singlePlace) {
 		map.setCenter(singlePlace.marker.position);
 		// zoom?
+		// todo: activate info box
 	};
 	
 	this.markerClick = function(placeItem) {
@@ -182,7 +168,7 @@ $('#clickhere').click(function() {
 		placeService.nearbySearch(request, self.placesResultCallback);	
 	};
 	
-	this.firstTimeSearch = true;
+	
 	
 	// first 
 	map.addListener('bounds_changed', function() {
