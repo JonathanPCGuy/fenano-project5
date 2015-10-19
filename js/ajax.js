@@ -2,18 +2,26 @@
 
 // function that provides a framework for third party apis to be queried
 // when a location marker is activated
-var LocationInfoAjax = function(sourceName, ajaxConfig, ajaxSuccess, targetDomId) {
+var LocationInfoAjax = function(sourceName, ajaxConfig, ajaxSuccess, targetDomId, containerClassName) {
     this.sourceName = sourceName;
     this.ajaxConfig = ajaxConfig;
     this.ajaxConfig.context = this;
-    this.ajaxSuccess = ajaxSuccess;
-    this.targetDomId = targetDomId;	
+    this.ajaxSuccess = ajaxSuccess; // rename and clean up all of this, get ready for knockout
+    this.targetDomId = targetDomId;
+    this.containerClassName = containerClassName;
+    this.container = null;
+    this.context = this;
 };
 
 LocationInfoAjax.prototype = {
 	
     //self: this, <- this is not seen, probably more iffe stuff
     // not sure if specify here or in the ajax. probably here?
+    attachContainer: function() {
+        this.container = $('<div class="' + this.containerClassName +'"</div>');
+         $(this.targetDomId).append(this.container);
+        
+    },
 	beginQuery: function() {
         console.log('trying to make an ajax call');
                     // success /formatting function, tbd
@@ -21,13 +29,10 @@ LocationInfoAjax.prototype = {
        //     self.onErrorResult(); // to make this work i need to iffe. come back to this later
        // jquery docs says success will be deprecated, not sure if config sucess callback is still ok?
                 .done(function(response) {
-                           this.ajaxSuccess(response);
+                           this.ajaxSuccess(response, this.context);
                             // finally attached it to the dom!
                 });
     },
-    
-    //internalBeginQuery: {},
-    
     onProcessing: function() {
         // todo: show spinner for dom
     },
@@ -46,13 +51,8 @@ var LocationAjaxCalls = function(title, location, targetDom)
     // this will need to be moved to an init js of sorts
     this.ajaxArray.push(new LocationInfoAjax('New York Times',
         (function() {
-            //make ajax config function 
                 var nyTimesBaseUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.json';
                 var nyTimesApiKey = 'e7f4cd39938925b5b8319e5054a24442:13:22689669';
-                /*
-                ,
-                    'callback': callbackTarget
-                */
                 var nyTimesData = {
                     'q': title,
                     'api-key': nyTimesApiKey
@@ -60,14 +60,6 @@ var LocationAjaxCalls = function(title, location, targetDom)
             
             var ajaxConfig = {
                 url: nyTimesBaseUrl,
-            
-                // The name of the callback parameter, as specified by the nytimes service
-                // todo: better understand this
-                //jsonp: false,//"svc_search_v2_articlesearch",
-                //jsonpCallback: callbackTarget,
-                //context:self,
-                //context:this,
-                // Tell jQuery we're expecting JSONP
                 dataType: "json",
                 timeout: 5000,
                 // Tell nytimes what we want and that we want JSON
@@ -75,31 +67,28 @@ var LocationAjaxCalls = function(title, location, targetDom)
                 };
             return ajaxConfig;
             })(), 
-        function(response)
+        function(response, context)
         {
                     // custom handler
                 console.log('custom handler');
-                var articleListContainer = $('<div class="nytimes-articles"></div>');
+                //var articleListContainer = $('<div class="nytimes-articles"></div>');
+                // ok this is not seeing the reference dom
                     response.response.docs.forEach(function(article) {
-                        articleListContainer.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
+                        context.container.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
                     });
                     console.log(response);
                 // finally attached it to the dom!
-                $(this.targetDomId).append(articleListContainer)
+                //$(this.targetDomId).append(articleListContainer)
 
         },
-        targetDom));
+        targetDom,
+        'nytimes-articles'));
       
       // future goal: make this all param somehow?
       this.ajaxArray.push(new LocationInfoAjax('Starbucks',
         (function() {
             //make ajax config function 
                 var baseUrl = 'https://testhost.openapi.starbucks.com/location/v2/stores/nearby';
-                /*
-                ,
-                    'callback': callbackTarget
-                */
-                // location.lat, location.lon
                 var paramData = {
                     'latlng': location.lat+ ',' + location.lon,
                     'radius': 5
@@ -114,20 +103,21 @@ var LocationAjaxCalls = function(title, location, targetDom)
                 };
             return ajaxConfig;
             })(), 
-        function(response)
+        function(response, context)
         {
                     // custom handler
                 console.log('custom handler - starbucks test api');
-                var nearbyStarbucksContainer = $('<div class="starbucks-nearby"></div>');
+                //var nearbyStarbucksContainer = $('<div class="starbucks-nearby"></div>');
                     response.stores.forEach(function(singleStore) { // should sort by distance
-                        nearbyStarbucksContainer.append('<li>' + singleStore.store.name + ' - ' + singleStore.store.address.streetAddressLine1 + '</li>');
+                        context.container.append('<li>' + singleStore.store.name + ' - ' + singleStore.store.address.streetAddressLine1 + '</li>');
                     });
                     console.log(response);
                 // finally attached it to the dom!
-                $(this.targetDomId).append(nearbyStarbucksContainer)
+                //$(this.targetDomId).append(nearbyStarbucksContainer)
 
         },
-        targetDom));      
+        targetDom,
+        'starbucks-nearby'));      
 };
 
 var LocationInfoBox = function(marker, location, targetDom)
@@ -138,12 +128,15 @@ var LocationInfoBox = function(marker, location, targetDom)
     this.locationAjaxCalls = new LocationAjaxCalls(marker.title, location, targetDom);
 }
 
+// this is kind of like a view model
+// todo: move dom stuff to here
 LocationInfoBox.prototype = {
   infoBoxOpened: function() {
       // start all the ajax calls, async (need to read up on workers)
       // for now just do sync
       // todo: wrap function
       this.locationAjaxCalls.ajaxArray.forEach(function(singleAjax) {
+          singleAjax.attachContainer();
           singleAjax.beginQuery();
       });
   },
