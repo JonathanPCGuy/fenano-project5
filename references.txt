@@ -6,3 +6,6 @@ https://api.jquery.com/removeclass/
 
 filtering
 http://ryanrahlf.com/filtering-table-data-with-knockout-js/
+
+
+http://stackoverflow.com/questions/10643940/knockout-js-access-viewmodel-in-javascript-function-outside-viewmodels-scope
