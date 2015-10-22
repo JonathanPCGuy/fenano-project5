@@ -1,9 +1,13 @@
-var LocationInfo = function(formatFunction)
+var LocationInfo = function(parentNode, className, formatFunction)
 {
-	//this.formattedOutput '');
-	this.response = ko.observable(null);
+	var template = '<div class="' + this.containerClassName +'" data-bind="html: formattedHtml"></div>';
+	var targetNode = $(template);
+	$(parentNode).append(targetNode);
+	this.response = ko.observable();
 	this.formatFunction = formatFunction;
-	this.formattedHtml = ko.computed(this.generateHtml, this);	
+	this.formattedHtml = ko.computed(this.generateHtml, this);
+	ko.applyBindings(this, targetNode.get(0));
+	// if i want to move this in here then i need to attach it to the dom	
 };
 
 LocationInfo.prototype.generateHtml = function()
@@ -15,7 +19,7 @@ LocationInfo.prototype.generateHtml = function()
 	var result = this.formatFunction(this.response());
 	if(result == '')
 	{
-		// to do: better define errors
+		// to do: better define & display errors
 		return '<p>Error loading data</p>';
 	}
 	else
@@ -26,4 +30,8 @@ LocationInfo.prototype.generateHtml = function()
 
 LocationInfo.prototype.generateTempDivContainer = function() {
 	return $('<div class="container"></div>');
+};
+
+LocationInfo.prototype.cleanup = function() {
+	// detach and stop listening
 };

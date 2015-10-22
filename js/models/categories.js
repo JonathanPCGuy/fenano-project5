@@ -12,5 +12,4 @@ var Categories = {
 		myList.push(new Category('Dentists', 'dentist'));
 		return myList;
 	}
-	//(function() { }())  
 };
