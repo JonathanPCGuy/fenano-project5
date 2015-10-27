@@ -3,7 +3,7 @@
 
 // function that provides a framework for third party apis to be queried
 // when a location marker is activated
-var LocationInfoAjax = function(sourceName, ajaxConfig, formatFunction, targetDomId, containerClassName) {
+var LocationInfoDataSource = function(sourceName, ajaxConfig, formatFunction, targetDomId, containerClassName) {
     this.sourceName = sourceName;
     this.ajaxConfig = ajaxConfig;
     this.ajaxConfig.context = this;
@@ -15,7 +15,7 @@ var LocationInfoAjax = function(sourceName, ajaxConfig, formatFunction, targetDo
 
 };
 
-LocationInfoAjax.prototype = {
+LocationInfoDataSource.prototype = {
 	
     //self: this, <- this is not seen, probably more iffe stuff
     // not sure if specify here or in the ajax. probably here?
@@ -42,7 +42,37 @@ LocationInfoAjax.prototype = {
 var LocationAjaxCalls = function(title, location, targetDom)
 {
     this.ajaxArray = [];
-    this.ajaxArray.push(new LocationInfoAjax('New York Times',
+    
+    this.ajaxArray.push(new LocationInfoDataSource('Google StreetView',
+        (function() {
+                var baseUrl = 'https://maps.googleapis.com/maps/api/streetview';
+                var apiKey = 'AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs';
+                var params = {
+                    'location': location.lat+ ',' + location.lon,
+                    'key': apiKey,
+                    'size': '300x200'
+                };
+            
+            var ajaxConfig = {
+                url: baseUrl,
+                dataType: "image/jpg",
+                timeout: 5000,
+                "data": params          
+                };
+            return ajaxConfig;
+            })(), 
+        function(response)
+        {
+                console.log('Google StreetView Handler');
+                var htmlHolder = this.generateTempDivContainer();
+                htmlHolder.append($('<img>').attr('src',response));
+                console.log(response);
+                return htmlHolder.html();
+        },
+        targetDom,
+        'nytimes-articles'));
+    /*
+    this.ajaxArray.push(new LocationInfoDataSource('New York Times',
         (function() {
                 var nyTimesBaseUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.json';
                 var nyTimesApiKey = 'e7f4cd39938925b5b8319e5054a24442:13:22689669';
@@ -64,45 +94,52 @@ var LocationAjaxCalls = function(title, location, targetDom)
                 console.log('custom handler');
                 var htmlHolder = this.generateTempDivContainer();
                 response.response.docs.forEach(function(article) {
-                    htmlHolder.append('<li>' + article.headline.kicker + ' - ' + article.headline.main + '</li>');
+                    htmlHolder.append('<li>' + article.headline.kicker + '</li>');
                 });
                 console.log(response);
                 return htmlHolder.html();
         },
         targetDom,
-        'nytimes-articles'));
-      
-      // future goal: make this all param somehow?
-      this.ajaxArray.push(new LocationInfoAjax('Starbucks',
+        'nytimes-articles'));  */
+     // eventually i'll add in nearby coffee shops via google places api
+     
+      this.ajaxArray.push(new LocationInfoDataSource('Boston MBTA',
         (function() {
-            var baseUrl = 'https://testhost.openapi.starbucks.com/location/v2/stores/nearby';
-            var paramData = {
-                'latlng': location.lat+ ',' + location.lon,
-                'radius': 5
-            };
+            //http://realtime.mbta.com/developer/api/v2/stopsbylocation?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.346961&lon=-71.076640&format=json
+                var baseUrl = "http://realtime.mbta.com/developer/api/v2/stopsbylocation";
+                var queryParams = {
+                  'lat': location.lat,
+                  'lon': location.lon,
+                  'api_key': 'wX9NwuHnZU2ToO7GmGR9uw',
+                  'format': 'jsonp'
+                };
             
             var ajaxConfig = {
                 url: baseUrl,
-                dataType: "json",
+                dataType: 'jsonp',
+                jsonp: 'jsonpcallback',
                 timeout: 5000,
-                "data": paramData          
+                //headers: myHeaders,
+                data: queryParams,
+                cache: true
                 };
             return ajaxConfig;
             })(), 
         function(response)
         {
-                console.log('custom handler - starbucks test api');
+                // d/results[]/Name,DistanceFromCenter
+                console.log('custom handler');
                 var htmlHolder = this.generateTempDivContainer();
-                var maxStores = response.stores.length > 5 ? 5 : response.stores.length;
-                for(var i = 0; i < maxStores; i++)
+                var maxStops = response.stop.length > 5 ? 5 : response.stop.length;
+                for(var i = 0; i < maxStops; i++)
                 {
-                    htmlHolder.append('<li>' + response.stores[i].store.name + ' - ' + response.stores[i].store.address.streetAddressLine1 + '</li>');
-                }
+                    htmlHolder.append('<li>' + response.stop[i].stop_name +' - ' + parseFloat(response.stop[i].distance).toFixed(2) + ' miles away' + '</li>');
+                };
                 console.log(response);
                 return htmlHolder.html();
         },
         targetDom,
-        'starbucks-nearby'));    
+        'nytimes-articles'));    
 };
 
 // todo: move stuff out
