@@ -43,66 +43,47 @@ var LocationAjaxCalls = function(title, location, targetDom)
 {
     this.ajaxArray = [];
     
-    this.ajaxArray.push(new LocationInfoDataSource('Google StreetView',
+    this.ajaxArray.push(new LocationInfoDataSource('Wikipedia',
         (function() {
-                var baseUrl = 'https://maps.googleapis.com/maps/api/streetview';
-                var apiKey = 'AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs';
+                var baseUrl = 'https://en.wikipedia.org/w/api.php';
+                //var apiKey = 'AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs';
                 var params = {
-                    'location': location.lat+ ',' + location.lon,
-                    'key': apiKey,
-                    'size': '300x200'
+                    'action': 'opensearch',
+                    'search': title,
+                    'format': 'json',
+                    'namespace': '0',
+                    'limit': '1'
                 };
             
             var ajaxConfig = {
                 url: baseUrl,
-                dataType: "image/jpg",
+                dataType: "jsonp",
                 timeout: 5000,
-                "data": params          
+                "data": params,
+                headers: { 'Api-User-Agent': 'JLam FE Nano Degree/1.0; jonlam+dev@gmail.com' },          
                 };
             return ajaxConfig;
             })(), 
         function(response)
         {
-                console.log('Google StreetView Handler');
+                console.log('Wikipedia handler');
                 var htmlHolder = this.generateTempDivContainer();
-                htmlHolder.append($('<img>').attr('src',response));
-                console.log(response);
+                // verify there's ane entry in the search; need to get the title
+                if(response[1].length > 0)
+                {
+                    htmlHolder.append($('<p></p>').text(response[2][0]));
+                    //console.log(response);
+                }
+                else
+                {
+                    // no wiki article
+                    htmlHolder.append($('<p></p>').text('No wiki article found.'));
+                }
                 return htmlHolder.html();
         },
         targetDom,
-        'nytimes-articles'));
-    /*
-    this.ajaxArray.push(new LocationInfoDataSource('New York Times',
-        (function() {
-                var nyTimesBaseUrl = 'http://api.nytimes.com/svc/search/v2/articlesearch.json';
-                var nyTimesApiKey = 'e7f4cd39938925b5b8319e5054a24442:13:22689669';
-                var nyTimesData = {
-                    'q': title,
-                    'api-key': nyTimesApiKey
-                };
-            
-            var ajaxConfig = {
-                url: nyTimesBaseUrl,
-                dataType: "json",
-                timeout: 5000,
-                "data": nyTimesData          
-                };
-            return ajaxConfig;
-            })(), 
-        function(response)
-        {
-                console.log('custom handler');
-                var htmlHolder = this.generateTempDivContainer();
-                response.response.docs.forEach(function(article) {
-                    htmlHolder.append('<li>' + article.headline.kicker + '</li>');
-                });
-                console.log(response);
-                return htmlHolder.html();
-        },
-        targetDom,
-        'nytimes-articles'));  */
-     // eventually i'll add in nearby coffee shops via google places api
-     
+        'wikipedia-snippit'));
+
       this.ajaxArray.push(new LocationInfoDataSource('Boston MBTA',
         (function() {
             //http://realtime.mbta.com/developer/api/v2/stopsbylocation?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.346961&lon=-71.076640&format=json
@@ -119,7 +100,6 @@ var LocationAjaxCalls = function(title, location, targetDom)
                 dataType: 'jsonp',
                 jsonp: 'jsonpcallback',
                 timeout: 5000,
-                //headers: myHeaders,
                 data: queryParams,
                 cache: true
                 };
@@ -139,18 +119,22 @@ var LocationAjaxCalls = function(title, location, targetDom)
                 return htmlHolder.html();
         },
         targetDom,
-        'nytimes-articles'));    
+        'mbta-stations'));    
 };
 
 // todo: move stuff out
-var LocationInfoBox = function(marker, location, targetDom)
+var LocationInfoBox = function(title, location, targetDom)
 {
-    this.marker = marker;
-    this.locationAjaxCalls = new LocationAjaxCalls(marker.title, location, targetDom);
+    this.title = title;
+    this.targetDom = targetDom;
+    this.locationAjaxCalls = new LocationAjaxCalls(title, location, targetDom);
 }
 
 LocationInfoBox.prototype = {
   infoBoxOpened: function() {
+      // for now i'll set it directly here, but i'll move to mvvm later
+      // i think though i need to improve the ui and then come back to mvvm
+      $(this.targetDom).append($('<h4>' + this.title + '</h4>'));
       this.locationAjaxCalls.ajaxArray.forEach(function(singleAjax) {
           singleAjax.attachContainer();
           singleAjax.beginQuery();
