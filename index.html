@@ -4,26 +4,41 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<title>JLam's Discover Houston App</title>
+		<title>JLam's Discover Boston App</title>
 		<!-- todo: fixup style.css-->
 	</head>
 	<body>
+		<nav class="navbar navbar-default">
+			<div class="navbar-header">
+				<!-- navbar toggle?-->
+				<div class="navbar-brand">JLam's Discover Boston</div>
+			</div>
+			<!-- collapsible content below (when implemented)-->
+			<div class="collapse navbar-collapse" id="collapseable-navbar-items">
+      			<ul class="nav navbar-nav">
+					<!-- category drop down will go here-->
+				</ul>
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input id="filter" type="text" class="form-control" placeholder="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+					</div>
+				</form>
+		</nav>
 		<row>
-		<aside id="sidebar" data-bind="css: {'col-md-3': sideMenuVisible(), closed:!sideMenuVisible()}" >
+			
+		<aside id="sidebar" class="col-md-3" >
 			<!-- no params needed for this one, maybe for others-->
 			<!-- need to stick buttons in own div and make it pretty-->
-			<div id="clickhere" data-bind="click: toggleSideMenu">click here to snap menu to side</div>
 			<!-- this ui is still very ugly, will fix later-->
-			<div id="updateplaces" class="search-button" data-bind="css: {hidden: showRefreshButton() != true}, click: searchMap">click here to search current map area</div>
-			<div class="menu-content" data-bind="css: {visible: sideMenuVisible}">
-				<div id="filter">Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></div>
-				<ul data-bind="foreach: filteredPlaces" >
-					<li data-bind="text: title, click:$parent.menuItemClick"></li>
+			<div id="updateplaces" class="search-button" data-bind="click: searchMap">click here to search current map area</div>
+			<div class="menu-content">
+				<div data-bind="foreach: filteredPlaces" class="list-group">
+					<a href="#" data-bind="text: title, click:$parent.menuItemClick" class="list-group-item"></a>
 					<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
-				</ul>
+				</div>
 			</div>
 		</aside>
-		<div id="map-container" data-bind="css: {'col-md-12':!sideMenuVisible, 'col-md-9': sideMenuVisible}">
+		<div id="map-container" class="col-md-9">
 			<!-- ko stopBinding: true -->
 			<div id="map" class="col-md-12"></div>	
 			<!-- /ko -->
