@@ -94,7 +94,7 @@ var LocationAjaxCalls = function(title, location, targetDom)
                   'api_key': 'wX9NwuHnZU2ToO7GmGR9uw',
                   'format': 'jsonp'
                 };
-            
+            // todo: put in real api key
             var ajaxConfig = {
                 url: baseUrl,
                 dataType: 'jsonp',

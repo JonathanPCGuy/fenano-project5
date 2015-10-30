@@ -1,4 +1,4 @@
-var PlacesViewModel = function(categoryList) {
+var JLamAppViewModel = function(categoryList) {
 
 	var self = this;
 	
@@ -6,9 +6,16 @@ var PlacesViewModel = function(categoryList) {
 	this.filter = ko.observable("");
 	
 	// phase one - fixed category, then we'll make it observable
-	this.categoryList = categoryList;
+	this.categoryList = ko.observableArray(categoryList);
 	
-	this.currentCategory = ko.observable(this.categoryList[0]);
+	// = categoryList;
+	
+	this.currentCategory = ko.observable(this.categoryList()[0]);
+	
+	this.displayCurrentCategory = ko.computed(function() {
+		var returnString = 'Current Category: ' + self.currentCategory().displayName + '<span class="caret"></span>';
+		return returnString;
+	});
 
 	this.showRefreshButton = ko.observable(false);
 	
@@ -47,15 +54,14 @@ var PlacesViewModel = function(categoryList) {
 
 	this.menuItemClick = function(singlePlace) {
 		map.setCenter(singlePlace.marker.position);
-		// zoom?
-		// todo: activate info box?
+		self.markerClick(singlePlace);
 	};
 	
 	this.markerClick = function(placeItem) {
 		// seems the context when the thing is clicked is the marker itself?!?!
 		var infoWindow = new google.maps.InfoWindow({content: formatText(infoWindowContent, placeItem.place_id)});
-		infoWindow.addListener('domready', function() {return self.infoWindowDomReady.call(this, placeItem);});
-		infoWindow.open(map, this);	
+		infoWindow.addListener('domready', function() {return self.infoWindowDomReady.call(placeItem.marker, placeItem);});
+		infoWindow.open(map, placeItem.marker);	
 	};
 	
 	// other functions
@@ -124,7 +130,7 @@ var PlacesViewModel = function(categoryList) {
 		var request = {
 			location: mapCenter,
 			radius: searchRadius,
-			types: self.currentCategory.key	
+			types: [self.currentCategory().key]	
 		};
 		placeService.nearbySearch(request, self.placesResultCallback);	
 	};

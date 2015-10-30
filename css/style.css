@@ -1,15 +1,39 @@
 html, body { height: 100%; margin: 0; padding: 0; }
 
-#map-container { 
-  height: 100%; 
+.container-fluid {
+  max-height: 100%;
+  height:100%;
+}
+
+.navbar-row {
+  height:52px;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.row {
+
+  padding:0;
+  margin:0;
+}
+
+.main-content-item {
+    height: calc(100% - 52px);
+    height: -moz-calc(100% - 52px);
+    height: -webkit-calc(100% - 52px);
+}
+ 
+ .place-menu-title {
+   font-weight: bold;
  }
  
- #map {
-   height: 100%;
+ .place-menu-subtitle {
+   color: gray;
  }
  
- .hidden {
-   display: none;
+ #sidebar {
+   overflow-y: auto;
+   max-height: 100%;
  }
- 
- 

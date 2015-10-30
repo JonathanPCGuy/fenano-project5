@@ -28,7 +28,7 @@ function initMap() {
   
   // callback to add: on bounds change
   	
-  ko.applyBindings(new PlacesViewModel(Categories.getCategoryList()));
+  ko.applyBindings(new JLamAppViewModel(Categories.getCategoryList()));
 };
 
 

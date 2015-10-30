@@ -2,6 +2,8 @@
 var Place = function(data, callback) {
 	var self = this;
 	this.title = data.name;
+	this.subtitle = data.vicinity;
+	
 	this.place_id = data.place_id
 	this.location = {
 		lat: data.geometry.location.lat(),
@@ -12,6 +14,7 @@ var Place = function(data, callback) {
 			map: map,
 			title: this.title,
 			animation: google.maps.Animation.DROP	
-		});		
+		});
+		
 	this.marker.addListener('click', function() {return callback.call(this, self);}); //, self.rawData
 };

@@ -1,60 +1,76 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
-		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<title>JLam's Discover Boston App</title>
-		<!-- todo: fixup style.css-->
-	</head>
-	<body>
-		<nav class="navbar navbar-default">
-			<div class="navbar-header">
-				<!-- navbar toggle?-->
-				<div class="navbar-brand">JLam's Discover Boston</div>
-			</div>
-			<!-- collapsible content below (when implemented)-->
-			<div class="collapse navbar-collapse" id="collapseable-navbar-items">
-      			<ul class="nav navbar-nav">
-					<!-- category drop down will go here-->
-				</ul>
-				<form class="navbar-form navbar-left" role="search">
-					<div class="form-group">
-						<input id="filter" type="text" class="form-control" placeholder="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'">
-					</div>
-				</form>
-		</nav>
-		<row>
-			
-		<aside id="sidebar" class="col-md-3" >
-			<!-- no params needed for this one, maybe for others-->
-			<!-- need to stick buttons in own div and make it pretty-->
-			<!-- this ui is still very ugly, will fix later-->
-			<div id="updateplaces" class="search-button" data-bind="click: searchMap">click here to search current map area</div>
-			<div class="menu-content">
-				<div data-bind="foreach: filteredPlaces" class="list-group">
-					<a href="#" data-bind="text: title, click:$parent.menuItemClick" class="list-group-item"></a>
-					<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<title>JLam's Discover Boston App</title>
+	<!-- todo: fixup style.css-->
+</head>
+
+<body>
+	<div class="container-fluid">
+		<row class="row">
+			<nav class="navbar navbar-default col-md-12">
+				<div class="navbar-header">
+					<!-- navbar toggle?-->
+					<div class="navbar-brand">JLam's Discover Boston</div>
 				</div>
-			</div>
-		</aside>
-		<div id="map-container" class="col-md-9">
-			<!-- ko stopBinding: true -->
-			<div id="map" class="col-md-12"></div>	
-			<!-- /ko -->
-		</div>
+				<!-- collapsible content below (when implemented)-->
+				<div class="collapse navbar-collapse" id="collapseable-navbar-items">
+					<ul class="nav navbar-nav">
+						<!-- category drop down will go here-->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" data-bind="html: displayCurrentCategory()">
+							</a>
+							<ul class="dropdown-menu" data-bind="foreach: categoryList">
+								<li>
+									<a href="#" data-bind="text: displayName"></a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input id="filter" type="text" class="form-control" placeholder="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+						</div>
+					</form>
+				</div>
+			</nav>
 		</row>
-		<script src="js/libs/jQuery.js"></script>
-		<script src="js/libs/bootstrap.min.js"></script>
-		<script src="js/libs/knockout-3.3.0.js"></script>
-		<script src="js/ajax.js"></script>
-		<script src="js/models/Categories.js"></script>
-		<script src="js/models/Place.js"></script>
-		<script src="js/viewmodels/places.js"></script>
-		<script src="js/viewmodels/locationinfo.js"></script>
-		<script src="js/app.js"></script>
-		<script async defer
-	      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&libraries=places,geometry&callback=initMap">
-	    </script>
-	</body>
+		<row class="row main-content-row">
+			<aside id="sidebar" class="col-md-3 main-content-item">
+				<!-- no params needed for this one, maybe for others-->
+				<!-- need to stick buttons in own div and make it pretty-->
+				<!-- this ui is still very ugly, will fix later-->
+				<!--<div id="updateplaces" class="search-button" data-bind="click: searchMap">click here to search current map area</div>-->
+				<div class="menu-content">
+					<div data-bind="foreach: filteredPlaces" class="list-group">
+						<a href="#" data-bind="click:$parent.menuItemClick" class="list-group-item">
+							<div class="place-menu-title" data-bind="text: title"></div>
+							<div class="place-menu-subtitle" data-bind="text: subtitle"></div>
+						</a>
+						<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
+					</div>
+				</div>
+			</aside>
+			<!-- ko stopBinding: true -->
+			<div id="map" class="col-md-9 main-content-item">
+			</div>
+			<!-- /ko -->
+		</row>
+	</div>
+	<script src="js/libs/jQuery.js"></script>
+	<script src="js/libs/bootstrap.min.js"></script>
+	<script src="js/libs/knockout-3.3.0.js"></script>
+	<script src="js/ajax.js"></script>
+	<script src="js/models/Categories.js"></script>
+	<script src="js/models/Place.js"></script>
+	<script src="js/viewmodels/jlamapp.js"></script>
+	<script src="js/viewmodels/locationinfo.js"></script>
+	<script src="js/app.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&libraries=places,geometry&callback=initMap">
+	</script>
+</body>
 </html>
