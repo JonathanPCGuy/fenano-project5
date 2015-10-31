@@ -1,6 +1,7 @@
 var JLamAppViewModel = function(categoryList) {
 
 	var self = this;
+	this.map = map;
 	
 	this.placesList = ko.observableArray();
 	this.filter = ko.observable("");
@@ -12,10 +13,9 @@ var JLamAppViewModel = function(categoryList) {
 	
 	this.currentCategory = ko.observable(this.categoryList()[0]);
 	
-	this.displayCurrentCategory = ko.computed(function() {
-		var returnString = 'Current Category: ' + self.currentCategory().displayName + '<span class="caret"></span>';
-		return returnString;
-	});
+	this.categoryItemClick = function(selectedItem)	{
+		self.currentCategory(selectedItem);
+	}
 
 	this.showRefreshButton = ko.observable(false);
 	
@@ -115,7 +115,7 @@ var JLamAppViewModel = function(categoryList) {
 		// read map object and get viewable area
 		// needs to fit into format for request
 		// for now use NE corner. If bad UI we'll modify to use smaller radius
-		var bounds = map.getBounds();
+		var bounds = self.map.getBounds();
 		var mapCenter = bounds.getCenter();
 		var mapCorner = bounds.getNorthEast();	
 		
@@ -124,16 +124,16 @@ var JLamAppViewModel = function(categoryList) {
 		return radius;
 	};
 	
-	this.searchMap = function() {
+	this.searchMap = ko.computed(function() {
 		var searchRadius = self.getCurrentViewableMapArea();
-		var mapCenter = map.getCenter();
+		var mapCenter = self.map.getCenter();
 		var request = {
 			location: mapCenter,
 			radius: searchRadius,
 			types: [self.currentCategory().key]	
 		};
 		placeService.nearbySearch(request, self.placesResultCallback);	
-	};
+	}, self, {deferEvaluation: true});
 	
 	map.addListener('bounds_changed', function() {
 		// how to search on load once, and then when the button is clicked?
