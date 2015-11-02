@@ -52,15 +52,32 @@ var JLamAppViewModel = function(categoryList) {
 		this.sideMenuVisible(!this.sideMenuVisible());	
 	};
 
+	
 	this.menuItemClick = function(singlePlace) {
 		map.setCenter(singlePlace.marker.position);
 		self.markerClick(singlePlace);
 	};
 	
 	this.markerClick = function(placeItem) {
+		
+		// start an animation that times out fast
+		placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
+		// todo: onclose need to cancel timers
+		setTimeout((function() {
+			this.marker.setAnimation(null);
+		}).bind(placeItem), 700);
+		
+		// infowindow... attach it to dom?!
+		if(placeItem.infoWindowOpened == true)
+		{
+			return;
+		}
+		
+		placeItem.infoWindowOpened = true;
 		// seems the context when the thing is clicked is the marker itself?!?!
 		var infoWindow = new google.maps.InfoWindow({content: formatText(infoWindowContent, placeItem.place_id)});
 		infoWindow.addListener('domready', function() {return self.infoWindowDomReady.call(placeItem.marker, placeItem);});
+		infoWindow.addListener('closeclick', (function(){this.infoWindowOpened = false}).bind(placeItem));
 		infoWindow.open(map, placeItem.marker);	
 	};
 	

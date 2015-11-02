@@ -37,3 +37,8 @@ html, body { height: 100%; margin: 0; padding: 0; }
    overflow-y: auto;
    max-height: 100%;
  }
+ 
+ .my-info-window {
+   min-height: 200px;
+   min-width: 400px;
+ }

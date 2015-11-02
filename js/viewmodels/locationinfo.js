@@ -1,3 +1,7 @@
+
+var infoWindowContent = '<div class="my-info-window" id="infowindow-%data%"></div>';
+var infoWindowId = '#infowindow-%data%';
+
 var LocationInfo = function(parentNode, className, formatFunction)
 {
 	var template = '<div class="' + this.containerClassName +'" data-bind="html: formattedHtml"></div>';
