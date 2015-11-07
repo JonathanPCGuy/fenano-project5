@@ -20,7 +20,7 @@ LocationInfoDataSource.prototype = {
     //self: this, <- this is not seen, probably more iffe stuff
     // not sure if specify here or in the ajax. probably here?
     attachContainer: function() {
-         this.bindings = new LocationInfo(this.targetDomId, this.containerClassName, this.formatFunction);
+         this.bindings = new LocationInfo(this.sourceName, this.targetDomId, this.containerClassName, this.formatFunction);
     },
     removeBindings: function() {
       // todo  
@@ -91,7 +91,7 @@ var LocationAjaxCalls = function(title, location, targetDom)
                 var queryParams = {
                   'lat': location.lat,
                   'lon': location.lon,
-                  'api_key': 'wX9NwuHnZU2ToO7GmGR9uw',
+                  'api_key': 'wX9NwuHnZU2ToO7GmGR9uw', //todo: replace with my real key
                   'format': 'jsonp'
                 };
             // todo: put in real api key
@@ -134,7 +134,7 @@ LocationInfoBox.prototype = {
   infoBoxOpened: function() {
       // for now i'll set it directly here, but i'll move to mvvm later
       // i think though i need to improve the ui and then come back to mvvm
-      $(this.targetDom).append($('<h4>' + this.title + '</h4>'));
+      $(this.targetDom).append($('<h1>' + this.title + '</h1>'));
       this.locationAjaxCalls.ajaxArray.forEach(function(singleAjax) {
           singleAjax.attachContainer();
           singleAjax.beginQuery();
