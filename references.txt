@@ -12,3 +12,7 @@ http://stackoverflow.com/questions/10643940/knockout-js-access-viewmodel-in-java
 
 http://stackoverflow.com/questions/11645463/prevent-running-of-computed-properties-dependentobservable-in-knockout-js
 deferring evaluation of computed function
+
+https://mapicons.mapsmarker.com/
+
+todo: add CC-compliant license/attribution

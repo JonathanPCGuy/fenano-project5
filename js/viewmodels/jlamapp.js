@@ -62,6 +62,7 @@ var JLamAppViewModel = function(categoryList) {
 		
 		// start an animation that times out fast
 		placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
+		placeItem.marker.setIcon(selectedMarker);
 		// todo: onclose need to cancel timers
 		setTimeout((function() {
 			this.marker.setAnimation(null);
@@ -77,7 +78,10 @@ var JLamAppViewModel = function(categoryList) {
 		// seems the context when the thing is clicked is the marker itself?!?!
 		var infoWindow = new google.maps.InfoWindow({content: formatText(infoWindowContent, placeItem.place_id)});
 		infoWindow.addListener('domready', function() {return self.infoWindowDomReady.call(placeItem.marker, placeItem);});
-		infoWindow.addListener('closeclick', (function(){this.infoWindowOpened = false}).bind(placeItem));
+		infoWindow.addListener('closeclick', (function(){
+			this.infoWindowOpened = false;
+			this.marker.setIcon(defaultMarker);
+			}).bind(placeItem));
 		infoWindow.open(map, placeItem.marker);	
 	};
 	

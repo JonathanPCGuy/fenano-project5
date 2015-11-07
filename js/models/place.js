@@ -1,4 +1,7 @@
 // data is a google places search result item
+var defaultMarker = 'img/sight-marker.png';
+var selectedMarker = 'img/sight-selected.png';
+
 var Place = function(data, callback) {
 	var self = this;
 	this.title = data.name;
@@ -13,7 +16,8 @@ var Place = function(data, callback) {
 			position: new google.maps.LatLng(this.location.lat, this.location.lon),
 			map: map,
 			title: this.title,
-			animation: google.maps.Animation.DROP	
+			animation: google.maps.Animation.DROP,
+			icon: defaultMarker	
 		});
 		
 	this.marker.addListener('click', function() {return callback.call(this, self);}); //, self.rawData
