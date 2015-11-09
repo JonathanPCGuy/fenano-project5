@@ -7,6 +7,13 @@ var LocationInfo = function(sourceName, parentNode, className, formatFunction)
 	this.sourceName = ko.observable(sourceName);
 	// need outer container so the source of info can be IDed
 	var outerTemplate = '<div class="' + this.containerClassName +'-outer"><h2 class="datasource-title" data-bind="text:sourceName"></h2>';
+	// this one will vary based on the subclass	
+	/*
+		two div, one for the formatting, one for the error
+		how to support really custom bindings (one paragraph, one li)
+		
+	*/
+	// this one is defined by the child class
 	var template = '<div class="' + this.containerClassName +'" data-bind="html: formattedHtml"></div>';
 	var outerNode = $(outerTemplate);
 	var targetNode = $(template);
@@ -18,6 +25,8 @@ var LocationInfo = function(sourceName, parentNode, className, formatFunction)
 	
 	ko.applyBindings(this, outerNode.get(0));
 	// if i want to move this in here then i need to attach it to the dom	
+	this.dataLoaded = false;
+	this.errorOccured = false;
 };
 
 LocationInfo.prototype.generateHtml = function()

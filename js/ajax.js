@@ -20,10 +20,9 @@ LocationInfoDataSource.prototype = {
     //self: this, <- this is not seen, probably more iffe stuff
     // not sure if specify here or in the ajax. probably here?
     attachContainer: function() {
+        // this is the view model
+        // it's gonna vary between data sources
          this.bindings = new LocationInfo(this.sourceName, this.targetDomId, this.containerClassName, this.formatFunction);
-    },
-    removeBindings: function() {
-      // todo  
     },
 	beginQuery: function() {
         console.log('trying to make an ajax call');
@@ -46,7 +45,6 @@ var LocationAjaxCalls = function(title, location, targetDom)
     this.ajaxArray.push(new LocationInfoDataSource('Wikipedia',
         (function() {
                 var baseUrl = 'https://en.wikipedia.org/w/api.php';
-                //var apiKey = 'AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs';
                 var params = {
                     'action': 'opensearch',
                     'search': title,
@@ -67,6 +65,9 @@ var LocationAjaxCalls = function(title, location, targetDom)
         function(response)
         {
                 console.log('Wikipedia handler');
+                
+                // this should just return the raw data and not format it
+                
                 var htmlHolder = this.generateTempDivContainer();
                 // verify there's ane entry in the search; need to get the title
                 if(response[1].length > 0)
@@ -107,7 +108,6 @@ var LocationAjaxCalls = function(title, location, targetDom)
             })(), 
         function(response)
         {
-                // d/results[]/Name,DistanceFromCenter
                 console.log('custom handler');
                 var htmlHolder = this.generateTempDivContainer();
                 var maxStops = response.stop.length > 5 ? 5 : response.stop.length;
@@ -120,28 +120,4 @@ var LocationAjaxCalls = function(title, location, targetDom)
         },
         targetDom,
         'mbta-stations'));    
-};
-
-// todo: move stuff out
-var LocationInfoBox = function(title, location, targetDom)
-{
-    this.title = title;
-    this.targetDom = targetDom;
-    this.locationAjaxCalls = new LocationAjaxCalls(title, location, targetDom);
-}
-
-LocationInfoBox.prototype = {
-  infoBoxOpened: function() {
-      // for now i'll set it directly here, but i'll move to mvvm later
-      // i think though i need to improve the ui and then come back to mvvm
-      $(this.targetDom).append($('<h1>' + this.title + '</h1>'));
-      this.locationAjaxCalls.ajaxArray.forEach(function(singleAjax) {
-          singleAjax.attachContainer();
-          singleAjax.beginQuery();
-      });
-  },
-  
-  infoBoxClosed: function() {
-      // todo: implement cleanup
-  }  
 };

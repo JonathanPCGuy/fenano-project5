@@ -5,9 +5,6 @@ var placeService;
 
 // todo: move to a MVVM
 
-var infoWindowContent = '<div class="my-info-window" id="infowindow-%data%"></div>';
-var infoWindowId = '#infowindow-%data%';
-
 function formatText(template, text) {
   return template.replace('%data%', text);
 }

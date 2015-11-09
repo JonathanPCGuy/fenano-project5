@@ -98,17 +98,22 @@ var JLamAppViewModel = function(categoryList) {
 		}
 	}
 	
-
-	
 	this.infoWindowDomReady = function(rawData) {
 		// context is the infoWindow
 		console.log("dom ready!");
-		var targetDiv = formatText(infoWindowId, rawData.place_id);
+		var targetDivId = formatText(infoWindowId, rawData.place_id);
 		
-		var location = {'lat': rawData.location.lat, 'lon': rawData.location.lon};
+		//var location = {'lat': rawData.location.lat, 'lon': rawData.location.lon};
 		// now make the call to my new ajax functions to get the data
-		var ajaxCalls = new LocationInfoBox(rawData.title, location, targetDiv);
-		ajaxCalls.infoBoxOpened();
+		try
+		{
+			var locationBox = new LocationInfoBox(rawData, $(targetDivId));
+			locationBox.getData();
+		}
+		catch(err)
+		{
+			console.log(err);
+		}
 		// animation looks clunky, will need to optimize
 	};
 	
