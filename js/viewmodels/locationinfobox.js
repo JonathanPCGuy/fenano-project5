@@ -15,6 +15,7 @@ var LocationInfoBox = function(place, parentNode)
 	this.parentNode.append(this.outerNode);
 	this.dataSource = [];
 	// attach all the data sources
+	this.dataSource.push(new WikipediaDataSource(this.dataSourceNode, this.place));
 	this.dataSource.push(new MBTADataSource(this.dataSourceNode, this.place));
 	ko.applyBindings(this, this.outerNode.get(0));
 }

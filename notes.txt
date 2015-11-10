@@ -28,3 +28,10 @@ nice to have:
 -minification via gulp & that other stuff
 -2x external sources
 -auto locations (generic search?)
+
+
+todo (2015/09/11)
+-redirects - show where it redirected from
+-may refer to: (that landing page: need to see how to work around?)
+-popup - hidden behind other info box
+-close all option?

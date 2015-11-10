@@ -42,5 +42,8 @@ BaseLocationInfo.prototype.startDataLoad = function() {
 			// pass into view model
 			// error?
 			self.dataReceived(response);
-		});	
+		})
+		.error(function(x, status, error) {
+			self.errorOccured(true);
+		});
 };
