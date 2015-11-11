@@ -1,5 +1,5 @@
  var MBTADataSource = function(targetContainer, place) {
-	 this.dataSourceName = "MBTA Stations"
+	 this.dataSourceName = "Neary MBTA Transit Stations"
 	 var ajaxConfig = (function() {
             //http://realtime.mbta.com/developer/api/v2/stopsbylocation?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.346961&lon=-71.076640&format=json
 			var baseUrl = "http://realtime.mbta.com/developer/api/v2/stopsbylocation";
@@ -40,16 +40,21 @@
  
  MBTADataSource.prototype.dataReceived = function(response) {
 	console.log('processing MBTA response');
-	//var array = [];
 	try
 	{
 		var maxStops = response.stop.length > 5 ? 5 : response.stop.length;
 		for(var i = 0; i < maxStops; i++)
 		{
-			this.stationList.push({stopName: response.stop[i].stop_name, distance: parseFloat(response.stop[i].distance).toFixed(2) });
+			this.stationList.push({
+				stopName: response.stop[i].stop_name, 
+				distance: parseFloat(response.stop[i].distance).toFixed(2),
+				location: 	{
+							lat: response.stop[i].stop_lat,
+							lon: response.stop[i].stop_lon
+							} 
+				});
 		};
 		console.log(response);
-		//this.stationList(array);
 		this.dataLoaded(true);
 	}
 	catch(err)

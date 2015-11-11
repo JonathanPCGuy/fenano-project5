@@ -33,9 +33,24 @@ html, body { height: 100%; margin: 0; padding: 0; }
    color: gray;
  }
  
- #sidebar {
+.sidebar {
    overflow-y: auto;
    max-height: 100%;
+ }
+ 
+ @media (max-width:767px) {
+    .sidebar {
+      overflow-y: auto;
+      max-height: 50%;
+      margin-bottom: 10px;
+    } 
+    
+    .main-content-item {
+    height: calc(50% - 52px);
+    height: -moz-calc(50% - 52px);
+    height: -webkit-calc(50% - 52px);
+}
+ 
  }
  
  .my-info-window {

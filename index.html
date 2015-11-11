@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<title>JLam's Discover Boston App</title>
+	<meta name="viewport" content="width=device-width; initial-scale=1">
 	<!-- todo: fixup style.css-->
 </head>
 
@@ -16,6 +17,12 @@
 				<div class="navbar-header">
 					<!-- navbar toggle?-->
 					<div class="navbar-brand">JLam's Discover Boston</div>
+					<button type="button" class="navbar-toggle" data-toggle = "collapse" data-target="#collapseable-navbar-items">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
 				</div>
 				<!-- collapsible content below (when implemented)-->
 				<div class="collapse navbar-collapse" id="collapseable-navbar-items">
@@ -42,7 +49,7 @@
 			</nav>
 		</row>
 		<row class="row main-content-row">
-			<aside id="sidebar" class="col-md-3 main-content-item">
+			<aside class="col-md-3 col-xs-12 sidebar main-content-item">
 				<!-- no params needed for this one, maybe for others-->
 				<!-- need to stick buttons in own div and make it pretty-->
 				<!-- this ui is still very ugly, will fix later-->
@@ -58,7 +65,7 @@
 				</div>
 			</aside>
 			<!-- ko stopBinding: true -->
-			<div id="map" class="col-md-9 main-content-item">
+			<div id="map" class="col-md-9 col-xs-12 main-content-item">
 			</div>
 			<!-- /ko -->
 		</row>

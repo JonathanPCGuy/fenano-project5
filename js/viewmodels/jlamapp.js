@@ -6,10 +6,7 @@ var JLamAppViewModel = function(categoryList) {
 	this.placesList = ko.observableArray();
 	this.filter = ko.observable("");
 	
-	// phase one - fixed category, then we'll make it observable
 	this.categoryList = ko.observableArray(categoryList);
-	
-	// = categoryList;
 	
 	this.currentCategory = ko.observable(this.categoryList()[0]);
 	
