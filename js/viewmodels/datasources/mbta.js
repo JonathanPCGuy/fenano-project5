@@ -1,5 +1,5 @@
  var MBTADataSource = function(targetContainer, place) {
-	 this.dataSourceName = "Neary MBTA Transit Stations"
+	 this.dataSourceName = "Nearby MBTA Transit Stations"
 	 var ajaxConfig = (function() {
             //http://realtime.mbta.com/developer/api/v2/stopsbylocation?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.346961&lon=-71.076640&format=json
 			var baseUrl = "http://realtime.mbta.com/developer/api/v2/stopsbylocation";

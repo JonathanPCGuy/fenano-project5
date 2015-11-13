@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<title>JLam's Discover Boston App</title>
-	<meta name="viewport" content="width=device-width; initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- todo: fixup style.css-->
 </head>
 
@@ -16,7 +16,13 @@
 			<nav class="navbar navbar-default col-md-12">
 				<div class="navbar-header">
 					<!-- navbar toggle?-->
-					<div class="navbar-brand">JLam's Discover Boston</div>
+					<div class="navbar-brand">Discover Boston</div>
+					<button type="button" class="btn btn-default navbar-btn navbar-left refresh-btn" data-bind="click: searchTriggerFunction">
+						<!-- accessibility stuff-->
+						<span class="sr-only">Search current map area</span>
+						<div class="btn-item btn-item-text">Search current area</div>
+						<span class="btn-item glyphicon glyphicon-refresh"></span>
+					</button>
 					<button type="button" class="navbar-toggle" data-toggle = "collapse" data-target="#collapseable-navbar-items">
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
@@ -26,7 +32,7 @@
 				</div>
 				<!-- collapsible content below (when implemented)-->
 				<div class="collapse navbar-collapse" id="collapseable-navbar-items">
-					<ul class="nav navbar-nav">
+					<div class="nav navbar-nav">
 						<!-- category drop down will go here-->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
@@ -38,18 +44,19 @@
 								</li>
 							</ul>
 						</li>
-					</ul>
+					</div>
 					<form class="navbar-form navbar-left" role="search">
 						<div class="form-group">
 							<input id="filter" type="text" class="form-control" placeholder="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'">
 						</div>
 					</form>
-					<div class="navbar-right">Map icons from Maps Icons Collection https://mapicons.mapsmarker.com</div>
+					<!--<div class="navbar-right">Map icons from Maps Icons Collection https://mapicons.mapsmarker.com</div>-->
+					<!-- idea - add a collapisable about menu item that pops something up-->
 				</div>
 			</nav>
 		</row>
 		<row class="row main-content-row">
-			<aside class="col-md-3 col-xs-12 sidebar main-content-item">
+			<aside class="col-md-3 col-xs-12 sidebar main-content-item upper-content-item">
 				<!-- no params needed for this one, maybe for others-->
 				<!-- need to stick buttons in own div and make it pretty-->
 				<!-- this ui is still very ugly, will fix later-->
@@ -65,11 +72,12 @@
 				</div>
 			</aside>
 			<!-- ko stopBinding: true -->
-			<div id="map" class="col-md-9 col-xs-12 main-content-item">
+			<div id="map" class="col-md-9 col-xs-12 main-content-item lower-content-item">
 			</div>
 			<!-- /ko -->
 		</row>
 	</div>
+	<div id="media-check-div"></div>
 	<script src="js/libs/jQuery.js"></script>
 	<script src="js/libs/bootstrap.min.js"></script>
 	<script src="js/libs/knockout-3.3.0.js"></script>

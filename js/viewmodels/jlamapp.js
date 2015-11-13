@@ -10,6 +10,10 @@ var JLamAppViewModel = function(categoryList) {
 	
 	this.currentCategory = ko.observable(this.categoryList()[0]);
 	
+	this.iconPrefix = ko.computed(function() {
+		return self.currentCategory().iconPrefix;
+	});
+	
 	this.categoryItemClick = function(selectedItem)	{
 		self.currentCategory(selectedItem);
 	}
@@ -17,6 +21,15 @@ var JLamAppViewModel = function(categoryList) {
 	this.showRefreshButton = ko.observable(false);
 	
 	this.sideMenuVisible = ko.observable(false);
+	
+	this.searchTrigger = ko.observable(0);
+	
+	this.searchTriggerFunction = function()
+	{
+		self.searchTrigger(self.searchTrigger() + 1);
+	}
+	
+	
 	
 	// internal flag to allow initial search on load
 	this.firstTimeSearch = true;
@@ -59,7 +72,7 @@ var JLamAppViewModel = function(categoryList) {
 		
 		// start an animation that times out fast
 		placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
-		placeItem.marker.setIcon(selectedMarker);
+		placeItem.marker.setIcon('img/' + self.iconPrefix() + '-selected.png');
 		// todo: onclose need to cancel timers
 		setTimeout((function() {
 			this.marker.setAnimation(null);
@@ -77,7 +90,7 @@ var JLamAppViewModel = function(categoryList) {
 		infoWindow.addListener('domready', function() {return self.infoWindowDomReady.call(placeItem.marker, placeItem);});
 		infoWindow.addListener('closeclick', (function(){
 			this.infoWindowOpened = false;
-			this.marker.setIcon(defaultMarker);
+			this.marker.setIcon('img/' + self.iconPrefix() + '-marker.png');
 			}).bind(placeItem));
 		infoWindow.open(map, placeItem.marker);	
 	};
@@ -128,7 +141,7 @@ var JLamAppViewModel = function(categoryList) {
 			 for(var i = 0; i < limit; i++) {
 				 // todo: set entire array instead of doing one at a time
 				 	var currentItem = results[i];
-				 	var markerPlace = new Place(currentItem, self.markerClick);//function() {return self.markerClick(currentItem.place_id);});
+				 	var markerPlace = new Place(currentItem, self.markerClick, self.iconPrefix());//function() {return self.markerClick(currentItem.place_id);});
 					self.placesList.push(markerPlace);
 			 }
 		 }
@@ -148,6 +161,7 @@ var JLamAppViewModel = function(categoryList) {
 	};
 	
 	this.searchMap = ko.computed(function() {
+		var searchTrigger = self.searchTrigger();
 		var searchRadius = self.getCurrentViewableMapArea();
 		var mapCenter = self.map.getCenter();
 		var request = {

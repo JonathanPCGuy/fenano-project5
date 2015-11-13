@@ -2,7 +2,7 @@
 
 var map;
 var placeService;
-
+var zoomState = -1;
 // todo: move to a MVVM
 
 function formatText(template, text) {
@@ -20,13 +20,36 @@ function initMap() {
 	panControlOptions: { position:  google.maps.ControlPosition.RIGHT_TOP },
 	zoomControlOptions: { position:  google.maps.ControlPosition.RIGHT_CENTER}
   });
-  // why do i have to link it to a map?
+  addRemoveMapControls();
+  $(window).resize(addRemoveMapControls);
   placeService =  new google.maps.places.PlacesService(map);
   
-  // callback to add: on bounds change
-  	
   ko.applyBindings(new JLamAppViewModel(Categories.getCategoryList()));
 };
+
+function addRemoveMapControls()
+{
+  if($('#media-check-div').css('float') == 'none') {
+    // "responsive view"
+    if(zoomState !== 0)
+    {
+      map.setOptions({
+        zoomControl: false
+      });
+      zoomState = 0;
+    }
+  }
+  else
+  {
+    if(zoomState !== 1)
+    {
+      map.setOptions({
+        zoomControl: true
+      });
+      zoomState = 1;
+    }
+  }
+}
 
 
 
