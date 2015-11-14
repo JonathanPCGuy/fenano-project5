@@ -9,7 +9,7 @@ var JLamAppViewModel = function(categoryList) {
 	this.categoryList = ko.observableArray(categoryList);
 	
 	this.currentCategoryDisplayText = ko.computed(function() {
-		return "Current Category - " + this.currentCategory().displayName;
+		return "Category - " + this.currentCategory().displayName;
 	},self, {deferEvaluation: true});
 	
 	this.currentCategory = ko.observable(this.categoryList()[0]);
