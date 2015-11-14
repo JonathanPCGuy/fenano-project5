@@ -2,9 +2,11 @@
 <html>
 
 <head>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" media="(max-width:767px)" href="css/style-responsive.css">
 	<title>JLam's Discover Boston App</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- todo: fixup style.css-->
@@ -36,7 +38,7 @@
 						<!-- category drop down will go here-->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
-								<span data-bind="text: currentCategory().displayName"></span><span class="caret"></span>
+								<span data-bind="text: currentCategoryDisplayText()"></span><span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu" data-bind="foreach: categoryList">
 								<li>
@@ -56,7 +58,7 @@
 			</nav>
 		</row>
 		<row class="row main-content-row">
-			<aside class="col-md-3 col-xs-12 sidebar main-content-item upper-content-item">
+			<aside class="col-sm-3 col-md-3 col-xs-6 sidebar main-content-item upper-content-item">
 				<!-- no params needed for this one, maybe for others-->
 				<!-- need to stick buttons in own div and make it pretty-->
 				<!-- this ui is still very ugly, will fix later-->
@@ -72,12 +74,14 @@
 				</div>
 			</aside>
 			<!-- ko stopBinding: true -->
-			<div id="map" class="col-md-9 col-xs-12 main-content-item lower-content-item">
+			<div id="map" class="col-sm-9 col-md-9 col-xs-6 main-content-item lower-content-item">
 			</div>
 			<!-- /ko -->
 		</row>
 	</div>
-	<div id="media-check-div"></div>
+	<!-- dummy div used to trigger events based on css properties and media events-->
+	<div id="media-check-div" ></div>
+	<div class="orientation-check-div"></div>
 	<script src="js/libs/jQuery.js"></script>
 	<script src="js/libs/bootstrap.min.js"></script>
 	<script src="js/libs/knockout-3.3.0.js"></script>

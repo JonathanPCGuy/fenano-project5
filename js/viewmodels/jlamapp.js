@@ -8,6 +8,10 @@ var JLamAppViewModel = function(categoryList) {
 	
 	this.categoryList = ko.observableArray(categoryList);
 	
+	this.currentCategoryDisplayText = ko.computed(function() {
+		return "Current Category - " + this.currentCategory().displayName;
+	},self, {deferEvaluation: true});
+	
 	this.currentCategory = ko.observable(this.categoryList()[0]);
 	
 	this.iconPrefix = ko.computed(function() {
@@ -68,6 +72,8 @@ var JLamAppViewModel = function(categoryList) {
 		self.markerClick(singlePlace);
 	};
 	
+	this.currentOpenedPlaceItem = ko.observable(null);
+	
 	this.markerClick = function(placeItem) {
 		
 		// start an animation that times out fast
@@ -78,21 +84,55 @@ var JLamAppViewModel = function(categoryList) {
 			this.marker.setAnimation(null);
 		}).bind(placeItem), 700);
 		
-		// infowindow... attach it to dom?!
+		// if the marker's window is already opened, don't open another window
 		if(placeItem.infoWindowOpened == true)
 		{
 			return;
 		}
 		
+		if(self.currentOpenedPlaceItem() !== null)
+		{
+			// close existing item
+			self.closeOpenedMarker();
+		}
+		
+		
 		placeItem.infoWindowOpened = true;
+		
+		self.currentOpenedPlaceItem(placeItem);
+		
 		// seems the context when the thing is clicked is the marker itself?!?!
 		var infoWindow = new google.maps.InfoWindow({content: formatText(infoWindowContent, placeItem.place_id)});
 		infoWindow.addListener('domready', function() {return self.infoWindowDomReady.call(placeItem.marker, placeItem);});
 		infoWindow.addListener('closeclick', (function(){
 			this.infoWindowOpened = false;
 			this.marker.setIcon('img/' + self.iconPrefix() + '-marker.png');
+			self.currentOpenedPlaceItem(null);
 			}).bind(placeItem));
-		infoWindow.open(map, placeItem.marker);	
+		infoWindow.open(map, placeItem.marker);
+		placeItem.infoWindow = infoWindow;	
+		self.currentOpenedPlaceItem(placeItem);
+	};
+	
+	this.closeOpenedMarker = function() {
+					// close existing item
+		self.setMarkerState(self.currentOpenedPlaceItem(), false);
+		self.currentOpenedPlaceItem().infoWindow.close();
+		self.currentOpenedPlaceItem(null);
+	}
+	
+	
+	this.setMarkerState = function (placeItem, markerSelected) {
+		if(markerSelected == true)
+		{
+			placeItem.infoWindowOpened = true;
+			placeItem.marker.setIcon('img/' + self.iconPrefix() + '-selected.png');
+		}	
+		else
+		{
+			placeItem.infoWindowOpened = false;
+			placeItem.marker.setIcon('img/' + self.iconPrefix() + '-marker.png');
+		}
 	};
 	
 	// other functions
@@ -161,6 +201,11 @@ var JLamAppViewModel = function(categoryList) {
 	};
 	
 	this.searchMap = ko.computed(function() {
+		if(self.currentOpenedPlaceItem.peek() !== null)
+		{
+			// close existing item
+			self.closeOpenedMarker();
+		}
 		var searchTrigger = self.searchTrigger();
 		var searchRadius = self.getCurrentViewableMapArea();
 		var mapCenter = self.map.getCenter();

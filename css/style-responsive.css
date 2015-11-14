@@ -1,0 +1,43 @@
+@media (max-width: 767px) {
+    #media-check-div {
+     float: none;
+   }
+   
+   .btn-item-text {
+     display:none;
+   }
+   
+   .container-fluid {
+     padding:0 3px 0 3px;
+   }
+   
+       .my-info-window {
+    max-height: 175px;
+    }
+ }
+ 
+ @media (max-width:767px) and (orientation: portrait) {
+    .sidebar {
+      overflow-y: auto;
+      max-height: 50%;
+      margin-bottom: 10px;
+    } 
+
+     .upper-content-item {
+    height: calc(50% - 35px);
+    height: -moz-calc(50% - 35px);
+    height: -webkit-calc(50% - 35px);
+    }
+    
+    .lower-content-item {
+    height: calc(50% - 35px);
+    height: -moz-calc(50% - 35px);
+    height: -webkit-calc(50% - 35px);
+    }
+    
+    .orientation-check-div {
+    display:none;
+    float:left;
+  }  
+ 
+}

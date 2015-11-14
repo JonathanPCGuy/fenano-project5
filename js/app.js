@@ -27,6 +27,7 @@ function initMap() {
   ko.applyBindings(new JLamAppViewModel(Categories.getCategoryList()));
 };
 
+
 function addRemoveMapControls()
 {
   if($('#media-check-div').css('float') == 'none') {
@@ -49,6 +50,18 @@ function addRemoveMapControls()
       zoomState = 1;
     }
   }
+  
+    if($('.orientation-check-div').css('float') == 'left') {
+      // portrait 
+      $('.main-content-item').removeClass('col-xs-6');
+      $('.main-content-item').addClass('col-xs-12');
+    }
+    else
+    {
+      // landscape
+      $('.main-content-item').removeClass('col-xs-12');
+      $('.main-content-item').addClass('col-xs-6');
+    }
 }
 
 

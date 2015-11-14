@@ -14,34 +14,23 @@ html, body { height: 100%; margin: 0; padding: 0; }
 }
 
 .row {
-
   padding:0;
   margin:0;
 }
 
-@media(min-width: 768px)
-{
-  .refresh-btn, .btn-item {
-    float:left;
-  }
-  .btn-item-text {
-    margin-right:15px;
-  }
-  
-.main-content-item, .upper-content-item, .lower-content-item{
-    height: calc(100% - 52px);
-    height: -moz-calc(100% - 52px);
-    height: -webkit-calc(100% - 52px);
+.mbta-list {
+  list-style-position: inside;
+  padding-left:0;
 }
- }
- .place-menu-title {
-   font-weight: bold;
- }
+
+.place-menu-title {
+  font-weight: bold;
+}
  
- .place-menu-subtitle {
-   color: gray;
- }
- 
+.place-menu-subtitle {
+  color: gray;
+}
+
 .sidebar {
    overflow-y: auto;
    max-height: 100%;
@@ -52,57 +41,12 @@ html, body { height: 100%; margin: 0; padding: 0; }
    float: left;
  }
  
- @media (max-width:767px) {
-   
-   #media-check-div {
-     float: none;
-   }
-   
-   .btn-item-text {
-     display:none;
-   }
-   
-   .container-fluid {
-     padding:0 3px 0 3px;
-   }
-    .sidebar {
-      overflow-y: auto;
-      max-height: 50%;
-      margin-bottom: 10px;
-    } 
-    
-    .mbta-list {
-    list-style-position: inside;
-    padding-left:0;
-    }
-
-    .upper-content-item {
-    height: calc(50% - 35px);
-    height: -moz-calc(50% - 35px);
-    height: -webkit-calc(50% - 35px);
-    }
-    
-    .lower-content-item {
-    height: calc(50% - 35px);
-    height: -moz-calc(50% - 35px);
-    height: -webkit-calc(50% - 35px);
-    }
-    
-    .my-info-window {
-    max-height: calc(40% - 52px);
-    max-height: -moz-calc(40% - 52px);
-    max-height: -webkit-calc(40% - 52px);
-    }
-}
- 
- 
- 
  .my-info-window {
    min-height: 200px;
    min-width: 300px;
    max-width: 500px;
  }
- 
+
  h1 {
    font-weight: bold;
    font-size:24px;
@@ -112,3 +56,27 @@ html, body { height: 100%; margin: 0; padding: 0; }
    font-weight: bold;
    font-size:16px;
  }
+ 
+ @media(min-width: 768px)
+{
+  .refresh-btn, .btn-item {
+    float:left;
+  }
+  .btn-item-text {
+    margin-right:15px;
+  }
+  
+ .orientation-check-div {
+    display:none;
+    float:none;
+  }
+  
+
+}
+ 
+
+  .main-content-item, .upper-content-item, .lower-content-item{
+      height: calc(100% - 52px);
+      height: -moz-calc(100% - 52px);
+      height: -webkit-calc(100% - 52px);
+  }
