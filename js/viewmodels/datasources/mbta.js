@@ -1,3 +1,4 @@
+
 var MBTADataSource = function (targetContainer, place) {
     this.dataSourceName = "Nearby MBTA Transit Stations"
     var ajaxConfig = (function () {
@@ -36,6 +37,7 @@ MBTADataSource.prototype.dataContainerContents = function () {
     return domToInsert;
 };
 
+// required implementation - data processing function
 MBTADataSource.prototype.dataReceived = function (response) {
     console.log('processing MBTA response');
     try {

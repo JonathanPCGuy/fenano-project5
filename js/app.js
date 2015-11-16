@@ -12,7 +12,8 @@ function initMap() {
         panControlOptions: { position: google.maps.ControlPosition.RIGHT_TOP },
         zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER }
     });
-    // set the initial layout classes as needed
+    
+    // set the initial bootstrap layout classes as needed
     responsiveEvent();
     $(window).resize(responsiveEvent);
     placeService = new google.maps.places.PlacesService(map);

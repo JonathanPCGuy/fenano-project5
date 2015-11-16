@@ -2,7 +2,6 @@ var WikipediaDataSource = function (targetContainer, place) {
     this.dataSourceName = "Wikipedia"
     this.articleSummary = ko.observable("");
     var ajaxConfig = (function () {
-        //http://realtime.mbta.com/developer/api/v2/stopsbylocation?api_key=wX9NwuHnZU2ToO7GmGR9uw&lat=42.346961&lon=-71.076640&format=json
         var baseUrl = 'https://en.wikipedia.org/w/api.php';
         var params = {
             'action': 'opensearch',
@@ -37,6 +36,7 @@ WikipediaDataSource.prototype.dataContainerContents = function () {
     return domToInsert;
 };
 
+// required implementation - data processing function
 WikipediaDataSource.prototype.dataReceived = function (response) {
     console.log('processing Wikipedia response');
 

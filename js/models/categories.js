@@ -1,3 +1,4 @@
+// defines the search key, display name, and the icon prefix for a given category
 var Category = function (displayName, key, iconPrefix) {
     this.displayName = displayName;
     this.key = key;
