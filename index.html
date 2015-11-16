@@ -2,101 +2,117 @@
 <html>
 
 <head>
-	<link rel="stylesheet" type="text/css" href="css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" media="(max-width:767px)" href="css/style-responsive.css">
-	<title>JLam's Discover Boston App</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- todo: fixup style.css-->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" media="(max-width:767px)" href="css/style-responsive.css">
+    <title>JLam's Discover Boston App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-	<div class="container-fluid">
-		<row class="row">
-			<nav class="navbar navbar-default col-md-12">
-				<div class="navbar-header">
-					<!-- navbar toggle?-->
-					<div class="navbar-brand">Discover Boston</div>
-					<button type="button" class="btn btn-default navbar-btn navbar-left refresh-btn" data-bind="click: searchTriggerFunction">
-						<!-- accessibility stuff-->
-						<span class="sr-only">Search current map area</span>
-						<div class="btn-item btn-item-text">Search current area</div>
-						<span class="btn-item glyphicon glyphicon-refresh"></span>
-					</button>
-					<button type="button" class="navbar-toggle" data-toggle = "collapse" data-target="#collapseable-navbar-items">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-				</div>
-				<!-- collapsible content below (when implemented)-->
-				<div class="collapse navbar-collapse" id="collapseable-navbar-items">
-					<div class="nav navbar-nav navbar-collapsed-item">
-						<!-- category drop down will go here-->
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
-								<span data-bind="text: currentCategoryDisplayText()"></span><span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu" data-bind="foreach: categoryList">
-								<li>
-									<a href="#" data-bind="text: displayName, click:$parent.categoryItemClick"></a>
-								</li>
-							</ul>
-						</li>
-					</div>
-					<form class="navbar-form navbar-left navbar-collapsed-item" role="search">
-						<div class="form-group">
-							<input id="filter" type="text" class="form-control" placeholder="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'">
-						</div>
-					</form>
-					<!--<div class="navbar-right">Map icons from Maps Icons Collection https://mapicons.mapsmarker.com</div>-->
-					<!-- idea - add a collapisable about menu item that pops something up-->
-				</div>
-			</nav>
-		</row>
-		<row class="row main-content-row">
-			<aside class="col-sm-3 col-md-3 col-xs-6 sidebar main-content-item upper-content-item">
-				<!-- no params needed for this one, maybe for others-->
-				<!-- need to stick buttons in own div and make it pretty-->
-				<!-- this ui is still very ugly, will fix later-->
-				<!--<div id="updateplaces" class="search-button" data-bind="click: searchMap">click here to search current map area</div>-->
-				<div class="menu-content">
-					<div data-bind="foreach: filteredPlaces" class="list-group">
-						<a href="#" data-bind="click:$parent.menuItemClick" class="list-group-item">
-							<div class="place-menu-title" data-bind="text: title"></div>
-							<div class="place-menu-subtitle" data-bind="text: subtitle"></div>
-						</a>
-						<!-- debug: when we click on the list entry, hide the pin, this will carry over to the search filter later-->
-					</div>
-				</div>
-			</aside>
-			<!-- ko stopBinding: true -->
-			<div id="map" class="col-sm-9 col-md-9 col-xs-6 main-content-item lower-content-item">
-			</div>
-			<!-- /ko -->
-		</row>
-	</div>
-	<!-- dummy div used to trigger events based on css properties and media events-->
-	<div id="media-check-div" ></div>
-	<div class="orientation-check-div"></div>
-	<script src="js/libs/jQuery.js"></script>
-	<script src="js/libs/bootstrap.min.js"></script>
-	<script src="js/libs/knockout-3.3.0.js"></script>
-	<!--<script src="js/ajax.js"></script>-->
-	<script src="js/models/Categories.js"></script>
-	<script src="js/models/Place.js"></script>
-	<script src="js/viewmodels/jlamapp.js"></script>
-	<script src="js/viewmodels/BaseLocationInfo.js"></script>
-	<script src="js/viewmodels/locationinfobox.js"></script>
-	<script src="js/viewmodels/datasources/mbta.js"></script>
-	<script src="js/viewmodels/datasources/wikipedia.js"></script>
-	
-	<!--<script src="js/viewmodels/locationinfo.js"></script>-->
-	<script src="js/app.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&libraries=places,geometry&callback=initMap">
-	</script>
+    <div class="container-fluid">
+        <row class="row">
+            <nav class="navbar navbar-default col-md-12">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                        <a href="#" data-toggle="modal" data-target="#aboutModal">Discover Boston</a>
+                    </div>
+
+                    <!-- From the Bootstrap modal documentation-->
+                    <!-- Modal -->
+                    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">About Discover Boston</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <section>
+                                        <p>Discover Boston by Jonathan Lam</p>
+                                        <p>For the Udacity Front-end Nanodegree Project 5</p>
+                                    </section>
+                                    <section>
+                                        <p>Map icons from <a href="https://mapicons.mapsmarker.com" target="_blank">Maps Icons Collection</a></p>
+                                        <p>Refresh icon from <a href="http://glyphicons.com/" target="_blank">Glyphicons</a></p>
+                                    </section>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-default navbar-btn navbar-left refresh-btn" data-bind="click: searchTriggerFunction">
+                        <span class="sr-only">Search current map area</span>
+                        <div class="btn-item btn-item-text">Search current area</div>
+                        <span class="btn-item glyphicon glyphicon-refresh"></span>
+                    </button>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseable-navbar-items">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="collapseable-navbar-items">
+                    <div class="nav navbar-nav navbar-collapsed-item">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span data-bind="text: currentCategoryDisplayText()"></span><span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" data-bind="foreach: categoryList">
+                                <li>
+                                    <a href="#" data-bind="text: displayName, click:$parent.categoryItemClick"></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </div>
+                    <form class="navbar-form navbar-left navbar-collapsed-item" role="search">
+                        <div class="form-group">
+                            <input id="filter" type="text" class="form-control" placeholder="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                        </div>
+                    </form>
+                </div>
+            </nav>
+        </row>
+        <row class="row main-content-row">
+            <aside class="col-sm-3 col-md-3 col-xs-6 sidebar main-content-item upper-content-item">
+                <div class="menu-content">
+                    <div data-bind="foreach: filteredPlaces" class="list-group">
+                        <a href="#" data-bind="click:$parent.menuItemClick" class="list-group-item">
+                            <div class="place-menu-title" data-bind="text: title"></div>
+                            <div class="place-menu-subtitle" data-bind="text: subtitle"></div>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+            <!-- ko stopBinding: true -->
+            <div id="map" class="col-sm-9 col-md-9 col-xs-6 main-content-item lower-content-item">
+            </div>
+            <!-- /ko -->
+        </row>
+    </div>
+    <!-- dummy hidden divs used to trigger events based on css properties and media events-->
+    <div class="media-check-div"></div>
+    <div class="orientation-check-div"></div>
+    <script src="js/libs/jQuery.js"></script>
+    <script src="js/libs/bootstrap.min.js"></script>
+    <script src="js/libs/knockout-3.3.0.js"></script>
+    <script src="js/models/Categories.js"></script>
+    <script src="js/models/Place.js"></script>
+    <script src="js/viewmodels/jlamapp.js"></script>
+    <script src="js/viewmodels/datasources/basedatasource.js"></script>
+    <script src="js/viewmodels/locationinfobox.js"></script>
+    <script src="js/viewmodels/datasources/mbta.js"></script>
+    <script src="js/viewmodels/datasources/wikipedia.js"></script>
+    <script src="js/app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSymxDERhA6QPPPs38eaI2LR10r9i-Exs&libraries=places,geometry&callback=initMap">
+
+    </script>
 </body>
+
 </html>
